@@ -11,5 +11,21 @@ namespace PersonLibrary
     /// </summary>
     class Adult : Person
     {
+        /// <summary>
+        /// Поле для описание серии паспорта человека
+        /// </summary>
+        private int _passpportSeries;
+
+        /// <summary>
+        /// Поле для описания номера паспорта человека
+        /// </summary>
+        private int _passportNumber;
+
+        /// <summary>
+        /// Поле для описания семейного положения человека
+        /// </summary>
+        private FamilyStatusType _familyStatus;
+
+
     }
 }
