@@ -27,6 +27,11 @@ namespace PersonLibrary
         private FamilyStatusType _familyStatus;
 
         /// <summary>
+        /// Поле для описания места работы человека
+        /// </summary>
+        private string _placeOfWork;
+
+        /// <summary>
         /// Свойство для обращения к полю _passpportSeries
         /// </summary>
         public int PassportSeries { get; private set; }
@@ -40,5 +45,42 @@ namespace PersonLibrary
         /// Свойство для обращения к полю _familyStatus
         /// </summary>
         public FamilyStatusType FamilyStatus { get; private set; }
+
+        /// <summary>
+        /// Свойство для обращения к полю _placeOfWork
+        /// </summary>
+        public string PlaceOfWork { get; private set; }
+
+        /// <summary>
+        /// Метод для формирования строки с информацией о человеке
+        /// </summary>
+        public new string Info()
+        {
+            if (FamilyStatus == FamilyStatusType.Married)
+            {
+                return $"Имя и фамилия - {Name} {Surname}; " +
+                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
+                       $"Семейное положение - {FamilyStatus} с " +
+                       $"Место работы - {PlaceOfWork}";
+            }
+            else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
+            {
+                return $"Имя и фамилия - {Name} {Surname}; " +
+                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
+                       $"Семейное положение - {FamilyStatus}" +
+                       $"Место работы - {PlaceOfWork}";
+            }
+            else
+            {
+                return $"Имя и фамилия - {Name} {Surname}; " +
+                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
+                       $"Семейное положение - {FamilyStatus}" +
+                       $"Место работы - {PlaceOfWork}";
+            }
+        }
+            
     }
 }
