@@ -26,6 +26,19 @@ namespace PersonLibrary
         /// </summary>
         private FamilyStatusType _familyStatus;
 
+        /// <summary>
+        /// Свойство для обращения к полю _passpportSeries
+        /// </summary>
+        public int PassportSeries { get; private set; }
 
+        /// <summary>
+        /// Свойство для обращения к полю _passpportNumber
+        /// </summary>
+        public int PassportNumber { get; private set; }
+
+        /// <summary>
+        /// Свойство для обращения к полю _familyStatus
+        /// </summary>
+        public FamilyStatusType FamilyStatus { get; private set; }
     }
 }

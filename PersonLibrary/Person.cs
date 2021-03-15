@@ -121,7 +121,7 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Свойство для получении информации о человеке
+        /// Свойство для получения информации о человеке
         /// </summary>
         /// <returns>Значение формата string</returns>
         public string Info => $"Имя и фамилия - {Name} {Surname}; " +
