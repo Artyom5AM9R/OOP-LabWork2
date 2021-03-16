@@ -63,7 +63,7 @@ namespace PersonLibrary
                 {
                     if (value < 18)
                     {
-                        value = Person.Randomize.Next(18, MaxAge + 1);
+                        value = GetRandomAdultPerson().Age;
                     }
                     else
                     {
@@ -119,25 +119,13 @@ namespace PersonLibrary
             status.Add(3, "не замужем");
 
             string work;
-            if (PlaceOfWork == null && Gender == GenderType.Male)
+            if (!PlaceOfWork.Contains("Безработн") && !PlaceOfWork.Contains("Пенсионер"))
             {
-                work = "Безработный";
-            }
-            else if (PlaceOfWork == null && Gender == GenderType.Female)
-            {
-                work = "Безработная";
-            }
-            else if (Age > 60 && Gender == GenderType.Male)
-            {
-                work = "Пенсионер";
-            }
-            else if (Age > 55 && Gender == GenderType.Female)
-            {
-                work = "Пенсионер";
+                work = $"Место работы - {PlaceOfWork}";
             }
             else
             {
-                work = $"Место работы - {PlaceOfWork}";
+                work = PlaceOfWork;
             }
 
             if (FamilyStatus == FamilyStatusType.Married)
@@ -211,7 +199,26 @@ namespace PersonLibrary
             FamilyStatusType status = (FamilyStatusType)Randomize.Next(0,
                 Enum.GetNames(typeof(FamilyStatusType)).Length);
 
-            string work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+            string work;
+
+            if ((Human.Gender == GenderType.Male && Human.Age <= 60) 
+                || (Human.Gender == GenderType.Female && Human.Age <= 55))
+            {
+                work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+            }
+            else
+            {
+                work = "Пенсионер";
+            }
+
+            if (Human.Gender == GenderType.Male && work == null)
+            {
+                work = "Безработный";
+            }
+            else if (Human.Gender == GenderType.Female && work == null)
+            {
+                work = "Безработная";
+            }
 
             return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series, number,
                 status, work);

@@ -31,7 +31,7 @@ namespace OOP_LabWork2
         {
             var Human = new Adult();
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 30; i++)
             {
                 Console.WriteLine($"{i + 1}-ая личность");
                 Human = Adult.GetRandomAdultPerson();
