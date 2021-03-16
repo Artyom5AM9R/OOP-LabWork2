@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace PersonLibrary
 {
@@ -45,7 +46,7 @@ namespace PersonLibrary
             {
                 return _name;
             }
-            private set
+            protected private set
             {
                 _name = NameOrSurnameValidation(value, 0);
             }
@@ -60,7 +61,7 @@ namespace PersonLibrary
             {
                 return _surname;
             }
-            private set
+            protected private set
             {
                 _surname = NameOrSurnameValidation(value, 1);
             }
@@ -75,7 +76,7 @@ namespace PersonLibrary
             {
                 return _age;
             }
-            private set
+            protected private set
             {
                 while (true)
                 {
@@ -101,7 +102,7 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для обращения к полю, описывающему пол человека
         /// </summary>
-        public GenderType Gender { get; private set; }
+        public GenderType Gender { get; protected private set; }
 
         /// <summary>
         /// Пуской конструктор класса Person
@@ -200,13 +201,13 @@ namespace PersonLibrary
             };
             List<string> maleSurnames = new List<string>()
             {
-                "Андропов", "Троцкий", "Поляков", "Иванов", "Харламов",
+                "Андропов", "Лавров", "Поляков", "Иванов", "Харламов",
                     "Гаврилов", "Астахов", "Жданов", "Емельянов", "Виноградов"
             };
             List<string> femaleSurnames = new List<string>()
             {
                 "Гагарина", "Агапова", "Воронова", "Дубровина", "Борисова",
-                    "Высоцкая", "Глебова", "Журавлёва", "Громова", "Казакова"
+                    "Михеева", "Глебова", "Журавлёва", "Громова", "Казакова"
             };
             string name;
             string surname;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PersonLibrary;
 
 namespace OOP_LabWork2
 {
@@ -28,6 +29,17 @@ namespace OOP_LabWork2
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            var Human = new Adult();
+
+            Console.WriteLine("Сейчас что-то будет");
+            for (int i = 0; i < 10; i++)
+            {
+                Human = Adult.GetRandomAdultPerson();
+                Console.WriteLine($"{Human.Info()}\n");
+            }
+            /*Human = Adult.GetRandomAdultPerson();
+            Console.WriteLine(Human.Info());*/
+            Console.ReadLine();
         }
     }
 }
