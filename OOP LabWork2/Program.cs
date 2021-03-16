@@ -32,7 +32,7 @@ namespace OOP_LabWork2
             var Human = new Adult();
 
             Console.WriteLine("Сейчас что-то будет");
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Human = Adult.GetRandomAdultPerson();
                 Console.WriteLine($"{Human.Info()}\n");

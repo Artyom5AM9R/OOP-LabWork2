@@ -56,8 +56,22 @@ namespace PersonLibrary
         /// </summary>
         private static List<string> _passportList = new List<string>();
 
+        /// <summary>
+        /// Пустой конструктор класса
+        /// </summary>
         public Adult() { }
 
+        /// <summary>
+        /// Параметризированный конструктор класса
+        /// </summary>
+        /// <param name="name">имя</param>
+        /// <param name="surname">фамилия</param>
+        /// <param name="age">возраст</param>
+        /// <param name="gender">половая принадлежность</param>
+        /// <param name="series">серия паспорта</param>
+        /// <param name="number">номер паспорта</param>
+        /// <param name="status">семейное положение</param>
+        /// <param name="placeOfWork">место работы</param>
         public Adult(string name, string surname, int age, GenderType gender, 
             int series, int number, FamilyStatusType status, string placeOfWork)
         {
@@ -81,13 +95,27 @@ namespace PersonLibrary
             status.Add(2, "холост");
             status.Add(3, "не замужем");
 
-            if (FamilyStatus == FamilyStatusType.Married)
+            string work;
+            if (PlaceOfWork == null && Gender == GenderType.Male)
+            {
+                work = "Безработный";
+            }
+            else if (PlaceOfWork == null && Gender == GenderType.Female)
+            {
+                work = "Безработная";
+            }
+            else
+            {
+                work = $"Место работы - {PlaceOfWork}";
+            }
+
+                if (FamilyStatus == FamilyStatusType.Married)
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender)}\n" +
-                       $"Место работы - {PlaceOfWork}";
+                       $"{work}";
             }
             else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
             {
@@ -95,7 +123,7 @@ namespace PersonLibrary
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[2]}\n" +
-                       $"Место работы - {PlaceOfWork}";
+                       $"{work}";
             }
             else
             {
@@ -103,7 +131,7 @@ namespace PersonLibrary
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[3]}\n" +
-                       $"Место работы - {PlaceOfWork}";
+                       $"{work}";
             }
         }
 
@@ -119,12 +147,10 @@ namespace PersonLibrary
             {
                 "ООО 'Здоровье'", "АО 'Медстрахование'", "Клининговая компания 'Чистый дом'",
                     "Интернет-провайдер 'Дом.ru'", "Автошкола 'УдачаПлюс'", "СТО 'РесурсАвто'",
-                    "ООО 'Ситилинк'", "ТПУ", "ТУСУР"
+                    "ООО 'Ситилинк'", "ТПУ", "ТУСУР", null
             };
 
-            Person Human = new Person();
-
-            Human = GetRandomPerson();
+            Person Human = GetRandomPerson();
 
             while (true)
             {
@@ -156,7 +182,6 @@ namespace PersonLibrary
 
             string work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
 
-            //Console.WriteLine($"\n{Human.Name} {Human.Surname} {Human.Age} {Human.Gender} {series} {number} {status}\n\n");
             return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series, number, status, work);
         }
 
