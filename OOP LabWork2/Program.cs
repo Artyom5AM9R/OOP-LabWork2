@@ -31,9 +31,9 @@ namespace OOP_LabWork2
         {
             var Human = new Adult();
 
-            Console.WriteLine("Сейчас что-то будет");
             for (int i = 0; i < 15; i++)
             {
+                Console.WriteLine($"{i + 1}-ая личность");
                 Human = Adult.GetRandomAdultPerson();
                 Console.WriteLine($"{Human.Info()}\n");
             }

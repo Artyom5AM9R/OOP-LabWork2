@@ -25,7 +25,7 @@ namespace PersonLibrary
         /// <summary>
         /// Возраст человека
         /// </summary>
-        private int _age;
+        protected private int _age;
 
         /// <summary>
         /// Минимальный возраст человека
@@ -35,7 +35,7 @@ namespace PersonLibrary
         /// <summary>
         /// Максимальный возраст человека
         /// </summary>
-        const int MaxAge = 117;
+        protected const int MaxAge = 117;
 
         /// <summary>
         /// Свойство для обращения к полю _name

@@ -51,6 +51,29 @@ namespace PersonLibrary
         /// </summary>
         public string PlaceOfWork { get; private set; }
 
+        public int AdultAge
+        {
+            get
+            {
+                return _age;
+            }
+            private set
+            {
+                while (true)
+                {
+                    if (value < 18)
+                    {
+                        value = Person.Randomize.Next(18, MaxAge + 1);
+                    }
+                    else
+                    {
+                        _age = value;
+                        break;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Поле хранения паспортных данных людей
         /// </summary>
@@ -64,20 +87,20 @@ namespace PersonLibrary
         /// <summary>
         /// Параметризированный конструктор класса
         /// </summary>
-        /// <param name="name">имя</param>
-        /// <param name="surname">фамилия</param>
-        /// <param name="age">возраст</param>
-        /// <param name="gender">половая принадлежность</param>
-        /// <param name="series">серия паспорта</param>
-        /// <param name="number">номер паспорта</param>
-        /// <param name="status">семейное положение</param>
-        /// <param name="placeOfWork">место работы</param>
+        /// <param name="name">Имя</param>
+        /// <param name="surname">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="gender">Половая принадлежность</param>
+        /// <param name="series">Серия паспорта</param>
+        /// <param name="number">Номер паспорта</param>
+        /// <param name="status">Семейное положение</param>
+        /// <param name="placeOfWork">Место работы</param>
         public Adult(string name, string surname, int age, GenderType gender, 
             int series, int number, FamilyStatusType status, string placeOfWork)
         {
             Name = name;
             Surname = surname;
-            Age = age;
+            AdultAge = age;
             Gender = gender;
             PassportSeries = series;
             PassportNumber = number;
@@ -104,15 +127,23 @@ namespace PersonLibrary
             {
                 work = "Безработная";
             }
+            else if (Age > 60 && Gender == GenderType.Male)
+            {
+                work = "Пенсионер";
+            }
+            else if (Age > 55 && Gender == GenderType.Female)
+            {
+                work = "Пенсионер";
+            }
             else
             {
                 work = $"Место работы - {PlaceOfWork}";
             }
 
-                if (FamilyStatus == FamilyStatusType.Married)
+            if (FamilyStatus == FamilyStatusType.Married)
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"возраст - {AdultAge}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender)}\n" +
                        $"{work}";
@@ -120,7 +151,7 @@ namespace PersonLibrary
             else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"возраст - {AdultAge}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[2]}\n" +
                        $"{work}";
@@ -128,7 +159,7 @@ namespace PersonLibrary
             else
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                       $"возраст - {AdultAge}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[3]}\n" +
                        $"{work}";
@@ -182,7 +213,8 @@ namespace PersonLibrary
 
             string work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
 
-            return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series, number, status, work);
+            return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series, number,
+                status, work);
         }
 
         public string FindSpouse(string surname, GenderType gender)
