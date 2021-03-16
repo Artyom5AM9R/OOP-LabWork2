@@ -76,28 +76,33 @@ namespace PersonLibrary
         /// </summary>
         public new string Info()
         {
+            Dictionary<int, string> status = new Dictionary<int, string>(3);
+            status.Add(1, "в браке c");
+            status.Add(2, "холост");
+            status.Add(3, "не замужем");
+
             if (FamilyStatus == FamilyStatusType.Married)
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"Семейное положение - {FamilyStatus} с {FindSpouse(Surname, Gender)}\n" +
+                       $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender)}\n" +
                        $"Место работы - {PlaceOfWork}";
             }
-            /*else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
+            else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"Семейное положение - {FamilyStatus}" +
+                       $"Семейное положение - {status[2]}\n" +
                        $"Место работы - {PlaceOfWork}";
-            }*/
+            }
             else
             {
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"Семейное положение - {FamilyStatus}\n" +
+                       $"Семейное положение - {status[3]}\n" +
                        $"Место работы - {PlaceOfWork}";
             }
         }
@@ -157,25 +162,25 @@ namespace PersonLibrary
 
         public string FindSpouse(string surname, GenderType gender)
         {
-            Adult Persona = new Adult();
+            Adult Human = new Adult();
 
             while (true)
             {
-                Persona = GetRandomAdultPerson();
+                Human = GetRandomAdultPerson();
 
-                if (gender == GenderType.Female && Persona.Gender != gender)
+                if (gender == GenderType.Female && Human.Gender != gender)
                 {
-                    Persona.Surname = surname.Remove(surname.Length - 1, 1);
+                    Human.Surname = surname.Remove(surname.Length - 1, 1);
                     break;
                 }
-                else if (gender == GenderType.Male && Persona.Gender != gender)
+                else if (gender == GenderType.Male && Human.Gender != gender)
                 {
-                    Persona.Surname = surname + "а";
+                    Human.Surname = surname + "а";
                     break;
                 }
             }
 
-            return $"{Persona.Name} {Persona.Surname}";
+            return $"{Human.Name} {Human.Surname}";
         }
     }
 }
