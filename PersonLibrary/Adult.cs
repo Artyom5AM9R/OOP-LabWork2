@@ -51,13 +51,13 @@ namespace PersonLibrary
         /// </summary>
         public string PlaceOfWork { get; private set; }
 
-        public int Age
+        public override int Age
         {
             get
             {
                 return _age;
             }
-            private set
+            protected private set
             {
                 while (true)
                 {

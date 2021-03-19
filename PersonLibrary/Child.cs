@@ -33,6 +33,29 @@ namespace PersonLibrary
 
         public string PlaceOfStudy { get; private set; }
 
+        public override int Age
+        {
+            get
+            {
+                return _age;
+            }
+            protected private set
+            {
+                while (true)
+                {
+                    if (value > 17)
+                    {
+                        value = GetRandomChildPerson().Age;
+                    }
+                    else
+                    {
+                        _age = value;
+                        break;
+                    }
+                }
+            }
+        }
+
         public Child() { }
 
         public Child(string name, string surname, int age, GenderType gender)
@@ -144,12 +167,26 @@ namespace PersonLibrary
 
             Kid.Mother = Mother;
 
-            var placeOfStudyList = new List<string>()
+            var kindergartensList = new List<string>()
             {
-                "детский сад 'Солнышко'", "СОШ №5", "Лицей №2", "детский сад 'Родничок'"
+                "детский сад 'Солнышко'", "детский сад 'Родничок'", "детский сад 'Сказка'",
+                "детский сад 'Антошка'", "детский сад 'Морозко'"
+            };
+            var schoolsList = new List<string>()
+            {
+                "Гимназия №1", "СОШ №5", "Лицей №2", "СОШ №3", "Лицей №1"
             };
 
-            Kid.PlaceOfStudy = $"Место обучения - {placeOfStudyList[Person.Randomize.Next(0, placeOfStudyList.Count)]}";
+            if (Kid.Age < 7)
+            {
+                Kid.PlaceOfStudy = $"Место обучения - " +
+                    $"{kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)]}";
+            }
+            else
+            {
+                Kid.PlaceOfStudy = $"Место обучения - " +
+                    $"{schoolsList[Person.Randomize.Next(0, schoolsList.Count)]}";
+            }
 
             return Kid;
         }
