@@ -70,7 +70,7 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для обращения к полю _age
         /// </summary>
-        public int Age
+        public virtual int Age
         {
             get
             {

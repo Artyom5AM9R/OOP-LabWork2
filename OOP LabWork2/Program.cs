@@ -37,9 +37,17 @@ namespace OOP_LabWork2
                 Human = Adult.GetRandomAdultPerson();
                 Console.WriteLine($"{Human.Info()}\n");
             }
-            /*Human = Adult.GetRandomAdultPerson();
-            Console.WriteLine(Human.Info());*/
             Console.ReadLine();
+
+            /*var Human = new Child();
+
+            for (int i = 0; i < 30; i++)
+            {
+                Console.WriteLine($"{i + 1}-ое дитё");
+                Human = Child.GetRandomChildPerson();
+                Console.WriteLine($"{Human.Info()}\n");
+            }
+            Console.ReadLine();*/
         }
     }
 }
