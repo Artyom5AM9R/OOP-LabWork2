@@ -29,7 +29,7 @@ namespace OOP_LabWork2
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var Human = new Adult();
+            /*var Human = new Adult();
 
             for (int i = 0; i < 30; i++)
             {
@@ -37,9 +37,9 @@ namespace OOP_LabWork2
                 Human = Adult.GetRandomAdultPerson();
                 Console.WriteLine($"{Human.Info()}\n");
             }
-            Console.ReadLine();
+            Console.ReadLine();*/
 
-            /*var Human = new Child();
+            var Human = new Child();
 
             for (int i = 0; i < 30; i++)
             {
@@ -47,7 +47,7 @@ namespace OOP_LabWork2
                 Human = Child.GetRandomChildPerson();
                 Console.WriteLine($"{Human.Info()}\n");
             }
-            Console.ReadLine();*/
+            Console.ReadLine();
         }
     }
 }

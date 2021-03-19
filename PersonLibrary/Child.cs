@@ -35,6 +35,14 @@ namespace PersonLibrary
 
         public Child() { }
 
+        public Child(string name, string surname, int age, GenderType gender)
+        {
+            Name = name;
+            Surname = surname;
+            Age = age;
+            Gender = gender;
+        }
+
         public Child(string name, string surname, int age, GenderType gender,
             Adult mother, Adult father, string place)
         {
@@ -81,13 +89,8 @@ namespace PersonLibrary
         {            
             var Father = new Adult();
             var Mother = new Adult();
-            var Kid = new Child();
             var pattern = Person.GetRandomPerson();
-
-            Kid.Name = pattern.Name;
-            Kid.Surname = pattern.Surname;
-            Kid.Age = pattern.Age;
-            Kid.Gender = pattern.Gender;
+            var Kid = new Child(pattern.Name, pattern.Surname, pattern.Age, pattern.Gender);
 
             if (Randomize.Next(0, 2) == 1)
             {
