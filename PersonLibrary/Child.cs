@@ -102,10 +102,10 @@ namespace PersonLibrary
             }
 
             return $"Имя и фамилия - {Name} {Surname}; " +
-                   $"возраст - {Age}; пол - {Gender}\n" +
+                   $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                    $"Мать - {mother}\n" +
                    $"Отец - {father}\n" +
-                   $"{PlaceOfStudy}\n";
+                   $"Место обучения - {PlaceOfStudy}\n";
         }
 
         public static Child GetRandomChildPerson()
@@ -179,13 +179,11 @@ namespace PersonLibrary
 
             if (Kid.Age < 7)
             {
-                Kid.PlaceOfStudy = $"Место обучения - " +
-                    $"{kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)]}";
+                Kid.PlaceOfStudy = kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)];
             }
             else
             {
-                Kid.PlaceOfStudy = $"Место обучения - " +
-                    $"{schoolsList[Person.Randomize.Next(0, schoolsList.Count)]}";
+                Kid.PlaceOfStudy = schoolsList[Person.Randomize.Next(0, schoolsList.Count)];
             }
 
             return Kid;

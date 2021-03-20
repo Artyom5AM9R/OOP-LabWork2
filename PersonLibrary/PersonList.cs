@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,18 @@ namespace PersonLibrary
         public void ShowList(string heading)
         {
             Console.WriteLine(heading);
-            foreach (Person Man in _list)
+            foreach (var Man in _list)
             {
                 Console.WriteLine(Man.Info);
             }
             Console.WriteLine();
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+        
         /// <summary>
         /// Метод для добавления записи о человеке в список людей
         /// </summary>

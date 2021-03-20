@@ -133,9 +133,9 @@ namespace PersonLibrary
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender).Name}" +
+                       $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender).Name} " +
                        $"{FindSpouse(Surname, Gender).Surname}\n" +
-                       $"{work}";
+                       $"{work}\n";
             }
             else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
             {
@@ -143,7 +143,7 @@ namespace PersonLibrary
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[2]}\n" +
-                       $"{work}";
+                       $"{work}\n";
             }
             else
             {
@@ -151,7 +151,7 @@ namespace PersonLibrary
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
                        $"Семейное положение - {status[3]}\n" +
-                       $"{work}";
+                       $"{work}\n";
             }
         }
 
@@ -246,8 +246,6 @@ namespace PersonLibrary
             }
 
             return Human;
-
-            //return $"{Human.Name} {Human.Surname}";
         }
     }
 }

@@ -29,17 +29,47 @@ namespace OOP_LabWork2
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            /*var Human = new Adult();
+            var ListOne = new PersonList();
 
-            for (int i = 0; i < 30; i++)
+            var Human = new Adult();
+
+            for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine($"{i + 1}-ая личность");
-                Human = Adult.GetRandomAdultPerson();
-                Console.WriteLine($"{Human.Info()}\n");
+                if (Person.Randomize.Next(1, 4) == 1)
+                {
+                    ListOne.Add(Adult.GetRandomAdultPerson());
+                }
+                else if (Person.Randomize.Next(1, 4) == 2)
+                {
+                    ListOne.Add(Child.GetRandomChildPerson());
+                }
+                else
+                {
+                    ListOne.Add(Person.GetRandomPerson());
+                }
             }
-            Console.ReadLine();*/
 
-            var Human = new Child();
+            foreach (var man in ListOne)
+            {
+                if (man.GetType() == typeof(Adult))
+                {
+                    Console.WriteLine(((Adult)man).Info());
+                }
+                else if (man.GetType() == typeof(Child))
+                {
+                    Console.WriteLine(((Child)man).Info());
+                }
+                else
+                {
+                    Console.WriteLine($"{((Person)man).Info}\n");
+                }
+            }
+
+            //ListOne.ShowList("Список людей:\n");
+
+            Console.ReadLine();
+
+            /*var Human = new Child();
 
             for (int i = 0; i < 30; i++)
             {
@@ -47,7 +77,7 @@ namespace OOP_LabWork2
                 Human = Child.GetRandomChildPerson();
                 Console.WriteLine($"{Human.Info()}\n");
             }
-            Console.ReadLine();
+            Console.ReadLine();*/
         }
     }
 }
