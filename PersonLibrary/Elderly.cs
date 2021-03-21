@@ -94,18 +94,19 @@ namespace PersonLibrary
         public static Elderly GetRandomElderlyPerson()
         {
             var Man = GetRandomPerson();
-            PensionAmount = Randomize.Next(MinPensionAmount, MaxPensionAmount + 1);
+            int pensionAmount = Randomize.Next(MinPensionAmount, MaxPensionAmount + 1);
+            int retirementYear;
 
             if (Man.Gender == GenderType.Male)
             {
-                RetirementYear = int.Parse(DateTime.Now.ToString("yyyy")) - Man.Age + 61;
+                retirementYear = int.Parse(DateTime.Now.ToString("yyyy")) - Man.Age + 61;
             }
             else
             {
-                RetirementYear = int.Parse(DateTime.Now.ToString("yyyy")) - Man.Age + 56;
+                retirementYear = int.Parse(DateTime.Now.ToString("yyyy")) - Man.Age + 56;
             }
 
-            return new Elderly(Man.Name, Man.Surname, Man.Age, Man.Gender, PensionAmount, RetirementYear);
+            return new Elderly(Man.Name, Man.Surname, Man.Age, Man.Gender, pensionAmount, retirementYear);
         }
     }
 }

@@ -44,6 +44,19 @@ namespace PersonLibrary
         {
             Array.Resize(ref _list, _list.Length + 1);
             _list[_list.Length - 1] = person;
+
+            var listForCopy = new List<Person>();
+
+            foreach (var node in _list)
+            {
+                if (!string.IsNullOrEmpty(node.Name))
+                {
+                    listForCopy.Add(node);
+                }
+            }
+
+            Array.Resize(ref _list, listForCopy.Count);
+            _list = listForCopy.ToArray();
         }
 
         /// <summary>

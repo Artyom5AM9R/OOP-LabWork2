@@ -31,15 +31,17 @@ namespace OOP_LabWork2
         {
             var ListOne = new PersonList();
 
-            var Human = new Adult();
+            //var Human = new Adult();
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 10; i++)
             {
-                int random = Person.Randomize.Next(2, 3);
+                int random = Person.Randomize.Next(1, 2);
 
                 if (random == 1)
                 {
-                    ListOne.Add(Adult.GetRandomAdultPerson());
+                    var Man = Adult.GetRandomAdultPerson();
+                    ListOne.Add(Man);
+                    ListOne.Add(Adult.GetSpouse(Man));
                 }
                 else if (random == 2)
                 {
@@ -75,7 +77,9 @@ namespace OOP_LabWork2
                 }
             }
 
-            //ListOne.ShowList("Список людей:\n");
+            Console.WriteLine(ListOne.Count());
+
+            //Human.View();
 
             Console.ReadLine();
 

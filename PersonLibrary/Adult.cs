@@ -12,44 +12,29 @@ namespace PersonLibrary
     public class Adult : Person
     {
         /// <summary>
-        /// Поле для описание серии паспорта человека
-        /// </summary>
-        private int _passpportSeries;
-
-        /// <summary>
-        /// Поле для описания номера паспорта человека
-        /// </summary>
-        private int _passportNumber;
-
-        /// <summary>
-        /// Поле для описания семейного положения человека
-        /// </summary>
-        private FamilyStatusType _familyStatus;
-
-        /// <summary>
-        /// Поле для описания места работы человека
-        /// </summary>
-        private string _placeOfWork;
-
-        /// <summary>
-        /// Свойство для обращения к полю _passpportSeries
+        /// Свойство для хранения информации о серии паспорта
         /// </summary>
         public int PassportSeries { get; private set; }
 
         /// <summary>
-        /// Свойство для обращения к полю _passpportNumber
+        /// Свойство для хранения информации о номере паспорта
         /// </summary>
         public int PassportNumber { get; private set; }
 
         /// <summary>
-        /// Свойство для обращения к полю _familyStatus
+        /// Свойство для хранения информации о семейном статусе
         /// </summary>
         public FamilyStatusType FamilyStatus { get; private set; }
 
         /// <summary>
-        /// Свойство для обращения к полю _placeOfWork
+        /// Свойство для хранения данных о брачном партнере
         /// </summary>
-        public string PlaceOfWork { get; private set; }
+        public Person Spouse { get; private set; }
+
+        /// <summary>
+        /// Свойство для хранения информации о месте работы
+        /// </summary>
+        public string Job { get; private set; }
 
         public override int Age
         {
@@ -64,7 +49,7 @@ namespace PersonLibrary
                     if (value < 18 || (value > 60 && Gender == GenderType.Male)
                         || (value > 55 && Gender == GenderType.Female))
                     {
-                        value = GetRandomAdultPerson().Age;
+                        value = GetPerson().Age;
                     }
                     else
                     {
@@ -91,13 +76,14 @@ namespace PersonLibrary
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
         /// <param name="age">Возраст</param>
-        /// <param name="gender">Половая принадлежность</param>
+        /// <param name="gender">Пол</param>
         /// <param name="series">Серия паспорта</param>
         /// <param name="number">Номер паспорта</param>
-        /// <param name="status">Семейное положение</param>
-        /// <param name="placeOfWork">Место работы</param>
+        /// <param name="status">Семеной положение</param>
+        /// <param name="spouse">Муж/жена</param>
+        /// <param name="job">Место работы</param>
         public Adult(string name, string surname, int age, GenderType gender, 
-            int series, int number, FamilyStatusType status, string placeOfWork)
+            int series, int number, FamilyStatusType status, Person spouse, string job)
         {
             Name = name;
             Surname = surname;
@@ -106,7 +92,32 @@ namespace PersonLibrary
             PassportSeries = series;
             PassportNumber = number;
             FamilyStatus = status;
-            PlaceOfWork = placeOfWork;
+            Spouse = spouse;
+            Job = job;
+        }
+
+        /// <summary>
+        /// Параметризированный конструктор класса
+        /// </summary>
+        /// <param name="name">Имя</param>
+        /// <param name="surname">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="gender">Половая принадлежность</param>
+        /// <param name="series">Серия паспорта</param>
+        /// <param name="number">Номер паспорта</param>
+        /// <param name="status">Семейное положение</param>
+        /// <param name="job">Место работы</param>
+        public Adult(string name, string surname, int age, GenderType gender,
+            int series, int number, FamilyStatusType status, string job)
+        {
+            Name = name;
+            Surname = surname;
+            Age = age;
+            Gender = gender;
+            PassportSeries = series;
+            PassportNumber = number;
+            FamilyStatus = status;
+            Job = job;
         }
 
         /// <summary>
@@ -120,13 +131,13 @@ namespace PersonLibrary
             status.Add(3, "не замужем");
 
             string work;
-            if (!PlaceOfWork.Contains("Безработн") && !PlaceOfWork.Contains("Пенсионер"))
+            if (!Job.Contains("Безработн"))
             {
-                work = $"Место работы - {PlaceOfWork}";
+                work = $"Место работы - {Job}";
             }
             else
             {
-                work = PlaceOfWork;
+                work = Job;
             }
 
             if (FamilyStatus == FamilyStatusType.Married)
@@ -134,8 +145,8 @@ namespace PersonLibrary
                 return $"Имя и фамилия - {Name} {Surname}; " +
                        $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"Семейное положение - {status[1]} {FindSpouse(Surname, Gender).Name} " +
-                       $"{FindSpouse(Surname, Gender).Surname}\n" +
+                       $"Семейное положение - {status[1]} {Spouse.Name} " +
+                       $"{Spouse.Surname}\n" +
                        $"{work}\n";
             }
             else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
@@ -157,21 +168,13 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Метод для генерирования данных о случайном взрослом человеке
+        /// Метод для генерирования данных о случайном взрослом человеке без жены/мужа
         /// </summary>
-        /// <returns></returns>
-        public static Adult GetRandomAdultPerson()
+        /// <returns>Значение типа Adult</returns>
+        public static Adult GetPerson()
         {
             int series;
             int number;
-            var businessOrganisation = new List<string>()
-            {
-                "ООО 'Здоровье'", "АО 'Медстрахование'", "Клининговая компания 'Чистый дом'",
-                    "Интернет-провайдер 'Дом.ru'", "Автошкола 'УдачаПлюс'", "СТО 'РесурсАвто'",
-                    "ООО 'Ситилинк'", "ТПУ", "ТУСУР", null
-            };
-
-            Person Human = GetRandomPerson();
 
             while (true)
             {
@@ -179,76 +182,115 @@ namespace PersonLibrary
                 number = Randomize.Next(100000, 1000000);
                 var data = series.ToString() + number.ToString();
 
-                foreach (string node in _passportList)
+                if (!_passportList.Contains(data))
                 {
-                    if (_passportList.Contains(data))
-                    {
-                        data = "";
-                        break;
-                    }
-                    else
-                    {
-                        _passportList.Add(data);
-                    }
-                }
-
-                if (data != "")
-                {
+                    _passportList.Add(data);
                     break;
                 }
             }
 
-            FamilyStatusType status = (FamilyStatusType)Randomize.Next(0,
-                Enum.GetNames(typeof(FamilyStatusType)).Length);
+            var Human = GetRandomPerson();
+            var Spouse = GetRandomPerson();
 
-            string work;
-
-            work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
-
-            /*if ((Human.Gender == GenderType.Male && Human.Age <= 60) 
-                || (Human.Gender == GenderType.Female && Human.Age <= 55))
+            var businessOrganisation = new List<string>()
             {
-                work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+                "ООО 'Здоровье'", "АО 'Медстрахование'", "Клининговая компания 'Чистый дом'",
+                    "Интернет-провайдер 'Дом.ru'", "Автошкола 'УдачаПлюс'", "СТО 'РесурсАвто'",
+                    "ООО 'Ситилинк'", "ТПУ", "ТУСУР", null
+            };
+
+            string job = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+
+            if (Human.Gender == GenderType.Male && job == null)
+            {
+                job = "Безработный";
             }
-            else
+            else if (Human.Gender == GenderType.Female && job == null)
             {
-                work = "Пенсионер";
-            }*/
-
-            if (Human.Gender == GenderType.Male && work == null)
-            {
-                work = "Безработный";
-            }
-            else if (Human.Gender == GenderType.Female && work == null)
-            {
-                work = "Безработная";
+                job = "Безработная";
             }
 
-            return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series, number,
-                status, work);
+            return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series,
+                number, FamilyStatusType.Unmarried, job);
         }
 
-        public static Adult FindSpouse(string surname, GenderType gender)
+        /// <summary>
+        /// Метод для поиска муха/жены для человека
+        /// </summary>
+        /// <param name="Man">Человек, для которого нудо искать мужа/жену</param>
+        /// <returns>Значение типа Adult</returns>
+        public static Adult FindSpouse(Adult Man)
         {
-            Adult Human = new Adult();
+            Adult Couple;
 
             while (true)
             {
-                Human = GetRandomAdultPerson();
+                Couple = GetPerson();
 
-                if (gender == GenderType.Female && Human.Gender != gender)
+                if (Man.Gender == GenderType.Female && Couple.Gender != Man.Gender &&
+                    (Couple.Age - Man.Age <= 3))
                 {
-                    Human.Surname = surname.Remove(surname.Length - 1, 1);
+                    Couple.Surname = Man.Surname.Remove(Man.Surname.Length - 1, 1);
                     break;
                 }
-                else if (gender == GenderType.Male && Human.Gender != gender)
+                else if (Man.Gender == GenderType.Male && Couple.Gender != Man.Gender &&
+                    (Couple.Age - Man.Age <= 3))
                 {
-                    Human.Surname = surname + "а";
+                    Couple.Surname = Man.Surname + "а";
                     break;
                 }
             }
 
-            return Human;
+            var NewMan = new Adult(Man.Name, Man.Surname, Man.Age, Man.Gender, Man.PassportSeries,
+                Man.PassportNumber, FamilyStatusType.Married, Couple, Man.Job);
+
+            Couple.FamilyStatus = FamilyStatusType.Married;
+            Couple.Spouse = NewMan;
+
+            return Couple;
+        }
+
+        /// <summary>
+        /// Метод для генерирования данных о случайном взрослом человеке c поиском жены/мужа
+        /// </summary>
+        /// <returns>Значение типа Adult</returns>
+        public static Adult GetRandomAdultPerson()
+        {
+            Adult FirstMan = GetPerson();
+            Adult SecondMan;
+
+            FirstMan.FamilyStatus =
+                (FamilyStatusType)Randomize.Next(0, Enum.GetNames(typeof(FamilyStatusType)).Length);
+
+            if (FirstMan.FamilyStatus ==FamilyStatusType.Married)
+            {
+                SecondMan = FindSpouse(FirstMan);
+                FirstMan.Spouse = SecondMan;
+            }
+            else
+            {
+                FirstMan.Spouse = new Adult(FirstMan.Name, FirstMan.Surname, FirstMan.Age, FirstMan.Gender,
+                    FirstMan.PassportSeries, FirstMan.PassportNumber, FirstMan.FamilyStatus, FirstMan.Job);
+            }
+
+            return FirstMan;
+        }
+
+        /// <summary>
+        /// Метод для получения информации о муже/жене человека
+        /// </summary>
+        /// <param name="Man">Человек, информацию о муже/жене которого нужно искать</param>
+        /// <returns>Значение типа Person</returns>
+        public static Person GetSpouse(Adult Man)
+        {
+            if (Man.FamilyStatus == FamilyStatusType.Married)
+            {
+                return Man.Spouse;
+            }
+            else
+            {
+                return new Person();
+            }
         }
     }
 }

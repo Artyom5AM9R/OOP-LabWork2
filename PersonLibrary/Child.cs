@@ -167,7 +167,7 @@ namespace PersonLibrary
                 }
                 else
                 {
-                    Mother = Adult.FindSpouse(Father.Surname, Father.Gender);
+                    Mother = Adult.FindSpouse(Father);
                 }
             }
 
@@ -182,8 +182,8 @@ namespace PersonLibrary
             };
 
             string placeOfStudy;
-
-            if (Man.Age < 7)
+            Console.WriteLine(Man.Age + "\n");
+            if (Man.Age < 6)
             {
                 placeOfStudy = kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)];
             }
