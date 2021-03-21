@@ -88,7 +88,7 @@ namespace PersonLibrary
                                   $"Размер пенсии - {PensionAmount} рублей\n";
 
         /// <summary>
-        /// Метод для генерации человека со случайными характеристиками
+        /// Метод для генерации записи о человека со случайными характеристиками
         /// </summary>
         /// <returns>Значение типа Elderly</returns>
         public static Elderly GetRandomElderlyPerson()

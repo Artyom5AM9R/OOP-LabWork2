@@ -13,26 +13,23 @@ namespace PersonLibrary
     public class Child : Person
     {
         /// <summary>
-        /// Поле для описания матери ребёнка
+        /// Свойство для хранения данных про мать
         /// </summary>
-        private Adult _mother;
+        public Adult Mother { get; private set; }
 
         /// <summary>
-        /// Поле для описания отца ребёнка
+        /// Свойство для хранения данных про отца
         /// </summary>
-        private Adult _father;
-
-        /// <summary>
-        /// Поле для описания названия детского сада/школы ребёнка
-        /// </summary>
-        private string _placeOfStudy;
-
-        public Adult Mother { get; set; }
-
         public Adult Father { get; set; }
 
+        /// <summary>
+        /// Свойство для хранения значения о месте учебы
+        /// </summary>
         public string PlaceOfStudy { get; private set; }
 
+        /// <summary>
+        /// Свойство для хранения возраста человека
+        /// </summary>
         public override int Age
         {
             get
@@ -56,16 +53,16 @@ namespace PersonLibrary
             }
         }
 
-        public Child() { }
-
-        public Child(string name, string surname, int age, GenderType gender)
-        {
-            Name = name;
-            Surname = surname;
-            Age = age;
-            Gender = gender;
-        }
-
+        /// <summary>
+        /// Параметризованный конструктор класса
+        /// </summary>
+        /// <param name="name">Имя</param>
+        /// <param name="surname">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="gender">Пол</param>
+        /// <param name="mother">Мать</param>
+        /// <param name="father">Отец</param>
+        /// <param name="place">Место учебы</param>
         public Child(string name, string surname, int age, GenderType gender,
             Adult mother, Adult father, string place)
         {
@@ -78,6 +75,10 @@ namespace PersonLibrary
             PlaceOfStudy = place;
         }
 
+        /// <summary>
+        /// Метод для получения информации о человеке
+        /// </summary>
+        /// <returns>Значение типа string</returns>
         public new string Info()
         {
             string mother;
@@ -108,12 +109,15 @@ namespace PersonLibrary
                    $"Место обучения - {PlaceOfStudy}\n";
         }
 
+        /// <summary>
+        /// Метод для генерации записи о человеке со случайными характеристиками
+        /// </summary>
+        /// <returns></returns>
         public static Child GetRandomChildPerson()
         {            
+            var Man = Person.GetRandomPerson();
             var Father = new Adult();
-            var Mother = new Adult();
-            var pattern = Person.GetRandomPerson();
-            var Kid = new Child(pattern.Name, pattern.Surname, pattern.Age, pattern.Gender);
+            string surname = Man.Surname;
 
             if (Randomize.Next(0, 2) == 1)
             {
@@ -126,46 +130,46 @@ namespace PersonLibrary
                     }
                 }
 
-                if (Kid.Gender == GenderType.Female)
+                if (Man.Gender == GenderType.Female)
                 {
-                    Kid.Surname = Father.Surname + "а";
+                    surname = Father.Surname + "а";
                 }
                 else
                 {
-                    Kid.Surname = Father.Surname;
+                    surname = Father.Surname;
                 }
             }
 
-            Kid.Father = Father;
+            var Mother = new Adult();
 
             if (Randomize.Next(0, 2) == 1)
             {
-                while (true)
+                if (string.IsNullOrEmpty(Father.Name))
                 {
-                    if (string.IsNullOrEmpty(Father.Name))
+                    while (true)
                     {
                         Mother = Adult.GetRandomAdultPerson();
 
-                        if (Kid.Gender == GenderType.Female)
+                        if (Mother.Gender == GenderType.Female)
                         {
-                            Kid.Surname = Mother.Surname;
                             break;
                         }
-                        else
-                        {
-                            Kid.Surname = Mother.Surname.Remove(Mother.Surname.Length - 1, 1);
-                            break;
-                        }
+                    }
+
+                    if (Man.Gender == GenderType.Female)
+                    {
+                        surname = Mother.Surname;
                     }
                     else
                     {
-                        Mother = Adult.FindSpouse(Father.Surname, Father.Gender);
-                        break;
+                        surname = Mother.Surname.Remove(Mother.Surname.Length - 1, 1);
                     }
                 }
+                else
+                {
+                    Mother = Adult.FindSpouse(Father.Surname, Father.Gender);
+                }
             }
-
-            Kid.Mother = Mother;
 
             var kindergartensList = new List<string>()
             {
@@ -177,16 +181,18 @@ namespace PersonLibrary
                 "Гимназия №1", "СОШ №5", "Лицей №2", "СОШ №3", "Лицей №1"
             };
 
-            if (Kid.Age < 7)
+            string placeOfStudy;
+
+            if (Man.Age < 7)
             {
-                Kid.PlaceOfStudy = kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)];
+                placeOfStudy = kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)];
             }
             else
             {
-                Kid.PlaceOfStudy = schoolsList[Person.Randomize.Next(0, schoolsList.Count)];
+                placeOfStudy = schoolsList[Person.Randomize.Next(0, schoolsList.Count)];
             }
 
-            return Kid;
+            return new Child(Man.Name, surname, Man.Age, Man.Gender, Mother, Father, placeOfStudy);
         }
     }
 }
