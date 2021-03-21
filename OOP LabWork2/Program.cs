@@ -35,7 +35,7 @@ namespace OOP_LabWork2
 
             for (int i = 0; i < 15; i++)
             {
-                int random = Person.Randomize.Next(1, 5);
+                int random = Person.Randomize.Next(2, 3);
 
                 if (random == 1)
                 {

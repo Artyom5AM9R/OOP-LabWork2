@@ -61,7 +61,8 @@ namespace PersonLibrary
             {
                 while (true)
                 {
-                    if (value < 18 || value > 60)
+                    if (value < 18 || (value > 60 && Gender == GenderType.Male)
+                        || (value > 55 && Gender == GenderType.Female))
                     {
                         value = GetRandomAdultPerson().Age;
                     }
@@ -202,7 +203,9 @@ namespace PersonLibrary
 
             string work;
 
-            if ((Human.Gender == GenderType.Male && Human.Age <= 60) 
+            work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+
+            /*if ((Human.Gender == GenderType.Male && Human.Age <= 60) 
                 || (Human.Gender == GenderType.Female && Human.Age <= 55))
             {
                 work = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
@@ -210,7 +213,7 @@ namespace PersonLibrary
             else
             {
                 work = "Пенсионер";
-            }
+            }*/
 
             if (Human.Gender == GenderType.Male && work == null)
             {
