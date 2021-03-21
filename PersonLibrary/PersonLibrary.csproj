@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Adult.cs" />
     <Compile Include="Child.cs" />
+    <Compile Include="Elderly.cs" />
     <Compile Include="FamilyStatusType.cs" />
     <Compile Include="GenderType.cs" />
     <Compile Include="Person.cs" />

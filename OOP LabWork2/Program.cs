@@ -33,15 +33,21 @@ namespace OOP_LabWork2
 
             var Human = new Adult();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
-                if (Person.Randomize.Next(1, 4) == 1)
+                int random = Person.Randomize.Next(1, 5);
+
+                if (random == 1)
                 {
                     ListOne.Add(Adult.GetRandomAdultPerson());
                 }
-                else if (Person.Randomize.Next(1, 4) == 2)
+                else if (random == 2)
                 {
                     ListOne.Add(Child.GetRandomChildPerson());
+                }
+                else if (random == 3)
+                {
+                    ListOne.Add(Elderly.GetRandomElderlyPerson());
                 }
                 else
                 {
@@ -58,6 +64,10 @@ namespace OOP_LabWork2
                 else if (man.GetType() == typeof(Child))
                 {
                     Console.WriteLine(((Child)man).Info());
+                }
+                else if (man.GetType() == typeof(Elderly))
+                {
+                    Console.WriteLine($"{((Elderly)man).Info}");
                 }
                 else
                 {

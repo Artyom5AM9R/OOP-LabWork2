@@ -61,7 +61,7 @@ namespace PersonLibrary
             {
                 while (true)
                 {
-                    if (value < 18)
+                    if (value < 18 || value > 60)
                     {
                         value = GetRandomAdultPerson().Age;
                     }
