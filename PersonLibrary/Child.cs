@@ -38,20 +38,14 @@ namespace PersonLibrary
             }
             protected private set
             {
-                while (true)
+                if (value < 18)
                 {
-                    if (value > 17)
-                    {
-                        value = GetRandomChildPerson().Age;
-                    }
-                    else
-                    {
-                        _age = value;
-                        break;
-                    }
+                    _age = value;
                 }
             }
         }
+
+        public Child() { }
 
         /// <summary>
         /// Параметризованный конструктор класса
@@ -114,8 +108,21 @@ namespace PersonLibrary
         /// </summary>
         /// <returns></returns>
         public static Child GetRandomChildPerson()
-        {            
-            var Man = Person.GetRandomPerson();
+        {
+            Person Man;
+
+            while (true)
+            {
+                Man = GetRandomPerson();
+                var Kid = new Child();
+                Kid.Age = Man.Age;
+
+                if (Kid.Age > 0)
+                {
+                    break;
+                }
+            }
+
             var Father = new Adult();
             string surname = Man.Surname;
 
@@ -182,14 +189,14 @@ namespace PersonLibrary
             };
 
             string placeOfStudy;
-            Console.WriteLine(Man.Age + "\n");
+
             if (Man.Age < 6)
             {
-                placeOfStudy = kindergartensList[Person.Randomize.Next(0, kindergartensList.Count)];
+                placeOfStudy = kindergartensList[Randomize.Next(0, kindergartensList.Count)];
             }
             else
             {
-                placeOfStudy = schoolsList[Person.Randomize.Next(0, schoolsList.Count)];
+                placeOfStudy = schoolsList[Randomize.Next(0, schoolsList.Count)];
             }
 
             return new Child(Man.Name, surname, Man.Age, Man.Gender, Mother, Father, placeOfStudy);

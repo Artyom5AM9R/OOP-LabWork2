@@ -223,7 +223,7 @@ namespace PersonLibrary
                 name = femaleNames[Randomize.Next(femaleNames.Count)];
                 surname = femaleSurnames[Randomize.Next(femaleSurnames.Count)];
             }
-            int age = Randomize.Next(MinAge, MaxAge);
+            int age = Randomize.Next(MinAge, MaxAge + 1);
 
             return new Person(name, surname, age, gender);
         }

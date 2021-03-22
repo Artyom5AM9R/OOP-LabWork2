@@ -24,12 +24,12 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для хранения величины размера пенсии
         /// </summary>
-        public static int PensionAmount { get; private set; }
+        public int PensionAmount { get; private set; }
 
         /// <summary>
         /// Свойство для хранения года выхода человека на пенсию
         /// </summary>
-        public static int RetirementYear { get; private set; }
+        public int RetirementYear { get; private set; }
 
         /// <summary>
         /// Свойство для хранения возраста человека
@@ -42,22 +42,17 @@ namespace PersonLibrary
             }
             protected private set
             {
-                while (true)
+                if (value > 60)
                 {
-                    
-                    if ((value > 60 && Gender == GenderType.Male) ||
-                        (value > 55 && Gender == GenderType.Female))
-                    {
-                        _age = value;
-                        break;
-                    }
-                    else
-                    {
-                        value = GetRandomElderlyPerson().Age;
-                    }
+                    _age = value;
                 }
             }
         }
+
+        /// <summary>
+        /// Пустой конструктор класса
+        /// </summary>
+        public Elderly() { }
 
         /// <summary>
         /// Параметризированный конструктор класса
@@ -93,7 +88,20 @@ namespace PersonLibrary
         /// <returns>Значение типа Elderly</returns>
         public static Elderly GetRandomElderlyPerson()
         {
-            var Man = GetRandomPerson();
+            Person Man;
+
+            while (true)
+            {
+                Man = GetRandomPerson();
+                Elderly OldMan = new Elderly();
+                OldMan.Age = Man.Age;
+
+                if (OldMan.Age > 0)
+                {
+                    break;
+                }
+            }
+
             int pensionAmount = Randomize.Next(MinPensionAmount, MaxPensionAmount + 1);
             int retirementYear;
 
@@ -106,7 +114,8 @@ namespace PersonLibrary
                 retirementYear = int.Parse(DateTime.Now.ToString("yyyy")) - Man.Age + 56;
             }
 
-            return new Elderly(Man.Name, Man.Surname, Man.Age, Man.Gender, pensionAmount, retirementYear);
+            return new Elderly(Man.Name, Man.Surname, Man.Age, Man.Gender,
+                pensionAmount, retirementYear);
         }
     }
 }

@@ -31,31 +31,27 @@ namespace OOP_LabWork2
         {
             var ListOne = new PersonList();
 
-            //var Human = new Adult();
+            int start = int.Parse(DateTime.Now.ToString("ss"));
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5000; i++)
             {
-                int random = Person.Randomize.Next(1, 2);
+                int random = Person.Randomize.Next(1, 4);
 
                 if (random == 1)
                 {
-                    var Man = Adult.GetRandomAdultPerson();
-                    ListOne.Add(Man);
-                    ListOne.Add(Adult.GetSpouse(Man));
+                    ListOne.Add(Adult.GetRandomAdultPerson());
                 }
                 else if (random == 2)
                 {
                     ListOne.Add(Child.GetRandomChildPerson());
                 }
-                else if (random == 3)
+                else
                 {
                     ListOne.Add(Elderly.GetRandomElderlyPerson());
                 }
-                else
-                {
-                    ListOne.Add(Person.GetRandomPerson());
-                }
             }
+
+            int finish = int.Parse(DateTime.Now.ToString("ss"));
 
             foreach (var man in ListOne)
             {
@@ -67,31 +63,17 @@ namespace OOP_LabWork2
                 {
                     Console.WriteLine(((Child)man).Info());
                 }
-                else if (man.GetType() == typeof(Elderly))
+                else
                 {
                     Console.WriteLine($"{((Elderly)man).Info}");
                 }
-                else
-                {
-                    Console.WriteLine($"{((Person)man).Info}\n");
-                }
             }
 
-            Console.WriteLine(ListOne.Count());
+            Console.WriteLine("Количество записей - " + ListOne.Count());
 
-            //Human.View();
+            Console.WriteLine($"Затраченное время на создание - {finish - start} сек");
 
             Console.ReadLine();
-
-            /*var Human = new Child();
-
-            for (int i = 0; i < 30; i++)
-            {
-                Console.WriteLine($"{i + 1}-ое дитё");
-                Human = Child.GetRandomChildPerson();
-                Console.WriteLine($"{Human.Info()}\n");
-            }
-            Console.ReadLine();*/
         }
     }
 }

@@ -44,18 +44,9 @@ namespace PersonLibrary
             }
             protected private set
             {
-                while (true)
+                if (value >= 18 && value <= 60)
                 {
-                    if (value < 18 || (value > 60 && Gender == GenderType.Male)
-                        || (value > 55 && Gender == GenderType.Female))
-                    {
-                        value = GetPerson().Age;
-                    }
-                    else
-                    {
-                        _age = value;
-                        break;
-                    }
+                    _age = value;
                 }
             }
         }
@@ -187,10 +178,7 @@ namespace PersonLibrary
                     _passportList.Add(data);
                     break;
                 }
-            }
-
-            var Human = GetRandomPerson();
-            var Spouse = GetRandomPerson();
+            }    
 
             var businessOrganisation = new List<string>()
             {
@@ -198,19 +186,32 @@ namespace PersonLibrary
                     "Интернет-провайдер 'Дом.ru'", "Автошкола 'УдачаПлюс'", "СТО 'РесурсАвто'",
                     "ООО 'Ситилинк'", "ТПУ", "ТУСУР", null
             };
-
             string job = businessOrganisation[Randomize.Next(0, businessOrganisation.Count)];
+            
+            Person Man;
+            
+            while (true)
+            {
+                Man = GetRandomPerson();
+                var ManForCheck = new Adult();
+                ManForCheck.Age = Man.Age;
 
-            if (Human.Gender == GenderType.Male && job == null)
+                if (ManForCheck.Age > 0)
+                {
+                    break;
+                }
+            }
+
+            if (Man.Gender == GenderType.Male && job == null)
             {
                 job = "Безработный";
             }
-            else if (Human.Gender == GenderType.Female && job == null)
+            else if (Man.Gender == GenderType.Female && job == null)
             {
                 job = "Безработная";
             }
 
-            return new Adult(Human.Name, Human.Surname, Human.Age, Human.Gender, series,
+            return new Adult(Man.Name, Man.Surname, Man.Age, Man.Gender, series,
                 number, FamilyStatusType.Unmarried, job);
         }
 
@@ -228,13 +229,13 @@ namespace PersonLibrary
                 Couple = GetPerson();
 
                 if (Man.Gender == GenderType.Female && Couple.Gender != Man.Gender &&
-                    (Couple.Age - Man.Age <= 3))
+                    (Math.Abs(Couple.Age - Man.Age) <= 3))
                 {
                     Couple.Surname = Man.Surname.Remove(Man.Surname.Length - 1, 1);
                     break;
                 }
                 else if (Man.Gender == GenderType.Male && Couple.Gender != Man.Gender &&
-                    (Couple.Age - Man.Age <= 3))
+                    (Math.Abs(Couple.Age - Man.Age) <= 3))
                 {
                     Couple.Surname = Man.Surname + "а";
                     break;
