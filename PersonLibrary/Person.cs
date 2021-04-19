@@ -25,17 +25,17 @@ namespace PersonLibrary
         /// <summary>
         /// Возраст человека
         /// </summary>
-        protected private int _age;
+        private int _age;
 
         /// <summary>
         /// Минимальный возраст человека
         /// </summary>
-        const int MinAge = 1;
+        public const int MinAge = 1;
 
         /// <summary>
         /// Максимальный возраст человека
         /// </summary>
-        protected const int MaxAge = 117;
+        public const int MaxAge = 117;
 
         /// <summary>
         /// Свойство для обращения к полю _name
@@ -46,9 +46,9 @@ namespace PersonLibrary
             {
                 return _name;
             }
-            protected private set
+            set
             {
-                _name = NameOrSurnameValidation(value, 0);
+                _name = NameOrSurnameValidation(value);
             }
         }
 
@@ -61,40 +61,35 @@ namespace PersonLibrary
             {
                 return _surname;
             }
-            protected private set
+            set
             {
-                _surname = NameOrSurnameValidation(value, 1);
+                _surname = NameOrSurnameValidation(value);
             }
         }
 
         /// <summary>
         /// Свойство для обращения к полю _age
         /// </summary>
-        public virtual int Age
+        public int Age
         {
             get
             {
                 return _age;
             }
-            protected private set
+            set
             {
-                while (true)
+                if (value >= MinAge && value <= MaxAge)
                 {
-                    if (value < MinAge)
-                    {
-                        RedTextOutput($"\nВозраст не может быть меньше {MinAge}!\n");
-                        value = InputAge();
-                    }
-                    else if (value > MaxAge)
-                    {
-                        RedTextOutput($"\nВозраст не может быть больше {MaxAge}!\n");
-                        value = InputAge();
-                    }
-                    else
-                    {
-                        _age = value;
-                        break;
-                    }
+                    _age = value;
+                }
+
+                if (value < MinAge)
+                {
+                    throw new Exception($"Возраст не может быть меньше {MinAge}!");
+                }
+                else if (value > MaxAge)
+                {
+                    throw new Exception($"Возраст не может быть больше {MaxAge}!");
                 }
             }
         }
@@ -102,10 +97,10 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для обращения к полю, описывающему пол человека
         /// </summary>
-        public GenderType Gender { get; protected private set; }
+        public GenderType Gender { get; set; }
 
         /// <summary>
-        /// Пуской конструктор класса Person
+        /// Пуской конструктор для класса Person
         /// </summary>
         public Person() { }
 
@@ -117,241 +112,95 @@ namespace PersonLibrary
         {
             Name = name;
             Surname = surname;
+
+            CheckOneLanguageInPerson();
+
             Age = age;
             Gender = gender;
         }
 
         /// <summary>
-        /// Свойство для получения информации о человеке
+        /// Свойство для получении информации о человеке
         /// </summary>
         /// <returns>Значение формата string</returns>
         public string Info => $"Имя и фамилия - {Name} {Surname}; " +
-                              $"возраст - {Age}; пол - {(RussianGenderType)Gender}";
+                              $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}";
 
         /// <summary>
-        /// Метод для вывода в консоль текста в красном цвете
+        /// Метод для проверки наличия одного языка в значениях имени и фамилии
         /// </summary>
-        /// <param name="text">Текст для вывода в консоль</param>
-        public static void RedTextOutput(string text)
+        public void CheckOneLanguageInPerson()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(text);
-            Console.ResetColor();
-        }
+            Regex RegexRussian = new Regex(@"[а-яё]");
+            Regex RegexEnglish = new Regex(@"[a-z]");
 
-        /// <summary>
-        /// Метод для ручного создания записи о человеке
-        /// </summary>
-        /// <returns>Значение формата Person</returns>
-        public Person InputPerson()
-        {
-            try
+            if (RegexRussian.IsMatch(Name) && RegexEnglish.IsMatch(Surname) ||
+                RegexEnglish.IsMatch(Name) && RegexRussian.IsMatch(Surname))
             {
-                while (true)
-                {
-                    Name = InputNameOrSurname(0);
-                    Surname = InputNameOrSurname(1);
-                    Regex RegexRussian = new Regex(@"[а-яё]");
-                    Regex RegexEnglish = new Regex(@"[a-z]");
-                    if (RegexRussian.IsMatch(Name) && RegexEnglish.IsMatch(Surname) ||
-                        RegexEnglish.IsMatch(Name) && RegexRussian.IsMatch(Surname))
-                    {
-                        RedTextOutput("\nНе допускается ввод имени и фамилии на разных языках. " +
-                            "Повторите ввод заново.\n");
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                Age = InputAge();
-                Gender = InputGender();
-
-                return new Person(Name, Surname, Age, Gender);
-            }
-            catch (Exception exception)
-            {
-                RedTextOutput($"{exception.Message}\nВ список будет добавлена " +
-                    "случайная запись о человеке.");
-
-                return GetRandomPerson();
+                throw new Exception("Не допускается ввод имени и фамилии на разных языках.");
             }
         }
 
         /// <summary>
-        /// Метод для возрата случайных значений
-        /// </summary>
-        public static Random Randomize = new Random();
-
-        /// <summary>
-        /// Метод для получения данных о человеке со случайными параметрами
-        /// </summary>
-        /// <returns>Значение формата Person</returns>
-        public static Person GetRandomPerson()
-        {
-            List<string> maleNames = new List<string>()
-            {
-                "Артём", "Сергей", "Алексей", "Александр", "Павел",
-                    "Роман", "Тимур", "Пётр", "Дмитрий", "Геннадий"
-            };
-            List<string> femaleNames = new List<string>()
-            {
-                "Анна", "Виктория", "Елизавета", "Полина", "Валентина",
-                    "Дарья", "Екатерина", "Лилия", "Карина", "Вероника"
-            };
-            List<string> maleSurnames = new List<string>()
-            {
-                "Андропов", "Лавров", "Поляков", "Иванов", "Харламов",
-                    "Гаврилов", "Астахов", "Жданов", "Емельянов", "Виноградов"
-            };
-            List<string> femaleSurnames = new List<string>()
-            {
-                "Гагарина", "Агапова", "Воронова", "Дубровина", "Борисова",
-                    "Михеева", "Глебова", "Журавлёва", "Громова", "Казакова"
-            };
-            string name;
-            string surname;
-
-            GenderType gender = (GenderType)Randomize.Next(0, Enum.GetNames(typeof(GenderType)).Length);
-            if (gender == GenderType.Male)
-            {
-                name = maleNames[Randomize.Next(maleNames.Count)];
-                surname = maleSurnames[Randomize.Next(maleSurnames.Count)];
-            }
-            else
-            {
-                name = femaleNames[Randomize.Next(femaleNames.Count)];
-                surname = femaleSurnames[Randomize.Next(femaleSurnames.Count)];
-            }
-            int age = Randomize.Next(MinAge, MaxAge + 1);
-
-            return new Person(name, surname, age, gender);
-        }
-
-        /// <summary>
-        /// Метод для ввода имени/фамилии из консоли
-        /// </summary>
-        /// <param name="identifier">Идентификатор имени (0) или фамилии (1)</param>
-        /// <returns>Значение формата string</returns>
-        public string InputNameOrSurname(int identifier)
-        {
-            string input = "";
-
-            if (identifier == 0)
-            {
-                Console.Write("Введите имя - ");
-                input = Console.ReadLine();
-            }
-            else if (identifier == 1)
-            {
-                Console.Write("Введите фамилию - ");
-                input = Console.ReadLine();
-            }
-            else
-            {
-                throw new Exception("Неверный идентификатор для функции ввода имени/фамилии.");
-            }
-
-            return input;
-        }
-
-        /// <summary>
-        /// Метод для проверки введённых имени или фамилии человека
+        /// Метод для проверки корректности имени или фамилии человека
         /// </summary>
         /// <param name="nameForCheck">Имя или фамилия, которые подлежат проверке</param>
-        /// <param name="identifier">Идентификатор имени (0) или фамилии (1)</param>
-        /// <returns>Значение формата string</returns>
-        public string NameOrSurnameValidation(string nameForCheck, int identifier)
+        /// <returns>Значение типа string</returns>
+        public string NameOrSurnameValidation(string nameForCheck)
         {
-            string name = "";
+            string name = null;
 
-            while (true)
+            nameForCheck = nameForCheck.ToLower();
+            var patternList = new List<string>()
             {
-                nameForCheck = nameForCheck.ToLower();
-                var patternList = new List<string>()
-                {
-                    @"^[а-яё]{2,}$",
-                    @"^[a-z]{2,}$",
-                    @"^[а-яё]{2,}-[а-яё]{2,}$",
-                    @"^[a-z]{2,}-[a-z]{2,}$",
-                };
+                @"^[а-яё]{2,}$",
+                @"^[a-z]{2,}$",
+                @"^[а-яё]{2,}-[а-яё]{2,}$",
+                @"^[a-z]{2,}-[a-z]{2,}$",
+            };
 
-                foreach (string pattern in patternList)
+            foreach (string pattern in patternList)
+            {
+                Regex Regex = new Regex(pattern);
+                if (Regex.IsMatch(nameForCheck))
                 {
-                    Regex Regex = new Regex(pattern);
-                    if (Regex.IsMatch(nameForCheck))
-                    {
-                        name = nameForCheck;
-                        break;
-                    }
-                }
-
-                if (name != "" && name.Contains("-"))
-                {
-                    name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.IndexOf("-")) +
-                        name.Substring(name.IndexOf("-") + 1, 1).ToUpper() +
-                        name.Substring(name.IndexOf("-") + 2);
+                    name = nameForCheck;
                     break;
                 }
-                else if (name != "" && !name.Contains("-"))
-                {
-                    name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.Length - 1);
-                    break;
-                }
-                else
-                {
-                    RedTextOutput("\nОшибка! Повторите ввод.\n");
-                    nameForCheck = InputNameOrSurname(identifier);
-                }
+            }
+
+            if (name != null && name.Contains("-") && name.Length < 25)
+            {
+                name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.IndexOf("-")) +
+                    name.Substring(name.IndexOf("-") + 1, 1).ToUpper() +
+                    name.Substring(name.IndexOf("-") + 2);
+            }
+            else if (name != null && !name.Contains("-") && name.Length < 13)
+            {
+                name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.Length - 1);
+            }
+            else
+            {
+                throw new Exception("Введено неверное значение.");
+
             }
 
             return name;
         }
 
         /// <summary>
-        /// Метод для ввода возраста человека из консоли
+        /// Метод для отображения пола человека на русском языке
         /// </summary>
-        /// <returns>Значение формата int</returns>
-        public int InputAge()
+        /// <param name="gender">Значение пола человека</param>
+        /// <returns>Значение типа string</returns>
+        public string TranslateGenderIntoRussian(GenderType gender)
         {
-            while (true)
+            switch (gender)
             {
-                try
-                {
-                    Console.Write("Введите возраст - ");
-                    string inputLine = Console.ReadLine();
-                    return int.Parse(inputLine);
-                }
-                catch (Exception exception)
-                {
-                    RedTextOutput($"\n{exception.Message} Повторите ввод.\n");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Метод для ввода пола человека из консоли и проверки введённого значения
-        /// </summary>
-        /// <returns>Значение формата string</returns>
-        public GenderType InputGender()
-        {
-            while (true)
-            {
-                Console.Write("Введите пол (м/ж) - ");
-                string genderString = Console.ReadLine().ToLower();
-
-                if (genderString == "м")
-                {
-                    return GenderType.Male;
-                }
-                else if (genderString == "ж")
-                {
-                    return GenderType.Female;
-                }
-                else
-                {
-                    RedTextOutput("\nПол указан неверно!\n");
-                }
+                case GenderType.Male:
+                    return "мужской";
+                default:
+                    return "женский";
             }
         }
     }
