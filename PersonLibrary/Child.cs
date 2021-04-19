@@ -10,7 +10,7 @@ namespace PersonLibrary
     /// <summary>
     /// Класс для описания детей
     /// </summary>
-    public class Child : Person
+    public class Child : PersonBase
     {
         /// <summary>
         /// Свойство для хранения данных про мать
@@ -20,12 +20,22 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для хранения данных про отца
         /// </summary>
-        public Adult Father { get; set; }
+        public Adult Father { get; private set; }
 
         /// <summary>
         /// Свойство для хранения значения о месте учебы
         /// </summary>
         public string PlaceOfStudy { get; private set; }
+
+        /// <summary>
+        /// Свойство для хранения информации о том, является ли ребенок сиротой
+        /// </summary>
+        public string PresenseOfParents { get; private set; }
+
+        /// <summary>
+        /// Наибольший возможный возраст молодого человека
+        /// </summary>
+        public const int MaxChildAge = 17;
 
         /// <summary>
         /// Свойство для хранения возраста человека
@@ -38,17 +48,20 @@ namespace PersonLibrary
             }
             protected private set
             {
-                if (value < 18)
+                if (value <= MaxChildAge)
                 {
                     _age = value;
+                }
+                else
+                {
+                    throw new Exception("Был указан неверный возраст.");
                 }
             }
         }
 
-        public Child() { }
-
         /// <summary>
-        /// Параметризованный конструктор класса
+        /// Параметризованный конструктор класса для молодого человека при наличии хотя
+        /// бы одного из родителей
         /// </summary>
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
@@ -70,6 +83,27 @@ namespace PersonLibrary
         }
 
         /// <summary>
+        /// Параметризованный конструктор класса для молодого человека при отсутствии родителей
+        /// </summary>
+        /// <param name="name">Имя</param>
+        /// <param name="surname">Фамилия</param>
+        /// <param name="age">Возраст</param>
+        /// <param name="gender">Пол</param>
+        /// <param name="mother">Мать</param>
+        /// <param name="father">Отец</param>
+        /// <param name="place">Место учебы</param>
+        public Child(string name, string surname, int age, GenderType gender,
+            string presenseOfParents, string place)
+        {
+            Name = name;
+            Surname = surname;
+            Age = age;
+            Gender = gender;
+            PresenseOfParents = presenseOfParents;
+            PlaceOfStudy = place;
+        }
+
+        /// <summary>
         /// Метод для получения информации о человеке
         /// </summary>
         /// <returns>Значение типа string</returns>
@@ -77,6 +111,14 @@ namespace PersonLibrary
         {
             string mother;
             string father;
+
+            if (!string.IsNullOrEmpty(PresenseOfParents))
+            {
+                return $"Имя и фамилия - {Name} {Surname}; " +
+                   $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
+                   $"{PresenseOfParents}\n" +
+                   $"Место обучения - {PlaceOfStudy}\n";
+            }
 
             if (string.IsNullOrEmpty(Mother.Name))
             {
@@ -97,109 +139,33 @@ namespace PersonLibrary
             }
 
             return $"Имя и фамилия - {Name} {Surname}; " +
-                   $"возраст - {Age}; пол - {(RussianGenderType)Gender}\n" +
+                   $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
                    $"Мать - {mother}\n" +
                    $"Отец - {father}\n" +
                    $"Место обучения - {PlaceOfStudy}\n";
         }
 
-        /// <summary>
-        /// Метод для генерации записи о человеке со случайными характеристиками
-        /// </summary>
-        /// <returns></returns>
-        public static Child GetRandomChildPerson()
+        public static string CheckForParents(Child kind)
         {
-            Person Man;
-
-            while (true)
+            if (!string.IsNullOrEmpty(kind.PresenseOfParents))
             {
-                Man = GetRandomPerson();
-                var Kid = new Child();
-                Kid.Age = Man.Age;
-
-                if (Kid.Age > 0)
-                {
-                    break;
-                }
-            }
-
-            var Father = new Adult();
-            string surname = Man.Surname;
-
-            if (Randomize.Next(0, 2) == 1)
-            {
-                while (true)
-                {
-                    Father = Adult.GetRandomAdultPerson();
-                    if (Father.Gender == GenderType.Male)
-                    {
-                        break;
-                    }
-                }
-
-                if (Man.Gender == GenderType.Female)
-                {
-                    surname = Father.Surname + "а";
-                }
-                else
-                {
-                    surname = Father.Surname;
-                }
-            }
-
-            var Mother = new Adult();
-
-            if (Randomize.Next(0, 2) == 1)
-            {
-                if (string.IsNullOrEmpty(Father.Name))
-                {
-                    while (true)
-                    {
-                        Mother = Adult.GetRandomAdultPerson();
-
-                        if (Mother.Gender == GenderType.Female)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (Man.Gender == GenderType.Female)
-                    {
-                        surname = Mother.Surname;
-                    }
-                    else
-                    {
-                        surname = Mother.Surname.Remove(Mother.Surname.Length - 1, 1);
-                    }
-                }
-                else
-                {
-                    Mother = Adult.FindSpouse(Father);
-                }
-            }
-
-            var kindergartensList = new List<string>()
-            {
-                "детский сад 'Солнышко'", "детский сад 'Родничок'", "детский сад 'Сказка'",
-                "детский сад 'Антошка'", "детский сад 'Морозко'"
-            };
-            var schoolsList = new List<string>()
-            {
-                "Гимназия №1", "СОШ №5", "Лицей №2", "СОШ №3", "Лицей №1"
-            };
-
-            string placeOfStudy;
-
-            if (Man.Age < 6)
-            {
-                placeOfStudy = kindergartensList[Randomize.Next(0, kindergartensList.Count)];
+                return "у ребенка нет обоих родителей.\n";
             }
             else
             {
-                placeOfStudy = schoolsList[Randomize.Next(0, schoolsList.Count)];
+                if (string.IsNullOrEmpty(kind.Mother.Name))
+                {
+                    return "у ребенка нет матери.\n";
+                }
+                else if (string.IsNullOrEmpty(kind.Father.Name))
+                {
+                    return "у ребенка нет отца.\n";
+                }
+                else
+                {
+                    return "ребенок растет в полной семье.\n";
+                }
             }
-
-            return new Child(Man.Name, surname, Man.Age, Man.Gender, Mother, Father, placeOfStudy);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PersonLibrary
         /// <summary>
         /// Возраст человека
         /// </summary>
-        private int _age;
+        protected private int _age;
 
         /// <summary>
         /// Минимальный возраст человека
@@ -70,13 +70,13 @@ namespace PersonLibrary
         /// <summary>
         /// Свойство для обращения к полю _age
         /// </summary>
-        public int Age
+        public virtual int Age
         {
             get
             {
                 return _age;
             }
-            set
+            protected private set
             {
                 if (value >= MinAge && value <= MaxAge)
                 {
@@ -193,7 +193,7 @@ namespace PersonLibrary
         /// </summary>
         /// <param name="gender">Значение пола человека</param>
         /// <returns>Значение типа string</returns>
-        public string TranslateGenderIntoRussian(GenderType gender)
+        public static string TranslateGenderIntoRussian(GenderType gender)
         {
             switch (gender)
             {

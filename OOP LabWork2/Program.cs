@@ -13,12 +13,13 @@ namespace OOP_LabWork2
     public class Program
     {
         /// <summary>
-        /// Метод для вывода в консоль текста в синем цвете
+        /// Метод для вывода в консоль цветного текста
         /// </summary>
-        /// <param name="text">Текст для вывода в консоль</param>
-        public static void BlueTextOutput(string text)
+        /// <param name="text">Текст для вывода</param>
+        /// <param name="color">Цвет текста</param>
+        public static void ColorTextInConsole(string text, ConsoleColor color)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = color;
             Console.WriteLine(text);
             Console.ResetColor();
         }
@@ -29,51 +30,99 @@ namespace OOP_LabWork2
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var ListOne = new PersonList();
-
-            int start = int.Parse(DateTime.Now.ToString("ss"));
-
-            for (int i = 0; i < 5000; i++)
+            while (true)
             {
-                int random = Person.Randomize.Next(1, 4);
+                var ListOne = new PersonList();
+                int start = int.Parse(DateTime.Now.ToString("ss"));
+                Random randomize = new Random();
 
-                if (random == 1)
+                ColorTextInConsole("Создание списка с записями о людях:", ConsoleColor.Blue);
+                Console.ReadKey();
+
+                for (int i = 0; i < 7; i++)
                 {
-                    ListOne.Add(Adult.GetRandomAdultPerson());
+                    int random = randomize.Next(1, 4);
+
+                    switch (random)
+                    {
+                        case 1:
+                            ListOne.Add(RandomPerson.GetRandomAdultPersonWithoutSpouse());
+                            break;
+                        case 2:
+                            ListOne.Add(RandomPerson.GetRandomAdultPersonWithSpouse());
+                            break;
+                        case 3:
+                            ListOne.Add(RandomPerson.GetRandomChildPerson());
+                            break;
+                    }
                 }
-                else if (random == 2)
+
+                int finish = int.Parse(DateTime.Now.ToString("ss"));
+
+                int counter = 0;
+
+                foreach (var man in ListOne)
                 {
-                    ListOne.Add(Child.GetRandomChildPerson());
+                    counter++;
+                    switch (man)
+                    {
+                        case Adult:
+                            ColorTextInConsole($"{counter}-й человек:", ConsoleColor.Green);
+                            Console.WriteLine(((Adult)man).Info());
+                            break;
+                        case Child:
+                            ColorTextInConsole($"{counter}-й человек:", ConsoleColor.Green);
+                            Console.WriteLine(((Child)man).Info());
+                            break;
+                    }
+                }
+
+                Console.ReadKey();
+                Console.WriteLine($"Количество записей - {ListOne.Count()}\n");
+                Console.WriteLine($"Время, затраченное на создание списка - {finish - start} сек\n");
+                Console.ReadKey();
+
+                try
+                {
+                    counter = 0;
+
+                    foreach (var man in ListOne)
+                    {
+                        counter++;
+
+                        if (counter == 4 && man is Adult)
+                        {
+                            ColorTextInConsole($"\nТип записи о {counter}-ом человеке в списке - " +
+                                $"{man.GetType()}", ConsoleColor.Blue);
+                            ColorTextInConsole($"\nИнформация о брачном партнере рассматриваемого человека:\n",
+                                ConsoleColor.Blue);
+                            Console.WriteLine(Adult.GetInfoAboutSpouse((Adult)man).Info());
+                        }
+                        else if (counter == 4 && man is Child)
+                        {
+                            ColorTextInConsole($"\nТип записи о {counter}-ом человеке в списке - " +
+                                $"{man.GetType()}", ConsoleColor.Blue);
+                            ColorTextInConsole($"\nИнформация о наличии родителей у ребенка: " +
+                                $"{Child.CheckForParents((Child)man)}\n", ConsoleColor.Blue);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ColorTextInConsole(exception.Message, ConsoleColor.Red);
+                }
+
+                ColorTextInConsole("\nДля выхода из программы нажмите клавишу Esc\n",
+                        ConsoleColor.Blue);
+                if (Console.ReadKey().Key == ConsoleKey.Escape)
+                {
+                    break;
                 }
                 else
                 {
-                    ListOne.Add(Elderly.GetRandomElderlyPerson());
+                    Console.WriteLine();
                 }
             }
-
-            int finish = int.Parse(DateTime.Now.ToString("ss"));
-
-            foreach (var man in ListOne)
-            {
-                if (man.GetType() == typeof(Adult))
-                {
-                    Console.WriteLine(((Adult)man).Info());
-                }
-                else if (man.GetType() == typeof(Child))
-                {
-                    Console.WriteLine(((Child)man).Info());
-                }
-                else
-                {
-                    Console.WriteLine($"{((Elderly)man).Info}");
-                }
-            }
-
-            Console.WriteLine("Количество записей - " + ListOne.Count());
-
-            Console.WriteLine($"Затраченное время на создание - {finish - start} сек");
-
-            Console.ReadLine();
         }
     }
 }
