@@ -10,7 +10,7 @@ namespace PersonLibrary
     /// <summary>
     /// Класс для описания человека
     /// </summary>
-    public class Person
+    public abstract class PersonBase
     {
         /// <summary>
         /// Имя человека
@@ -102,13 +102,13 @@ namespace PersonLibrary
         /// <summary>
         /// Пуской конструктор для класса Person
         /// </summary>
-        public Person() { }
+        public PersonBase() { }
 
         /// <summary>
         /// Конструктор с параметрами для класса Person
         /// </summary>
         /// <returns>Значение формата Person</returns>
-        public Person(string name, string surname, int age, GenderType gender)
+        public PersonBase(string name, string surname, int age, GenderType gender)
         {
             Name = name;
             Surname = surname;

@@ -14,7 +14,7 @@ namespace PersonLibrary
         /// <summary>
         /// Массив для хранения списка записей о людях
         /// </summary>
-        private Person[] _list = new Person[0];
+        private PersonBase[] _list = new PersonBase[0];
 
         /// <summary>
         /// Метод для вывода списка людей на экран
@@ -23,7 +23,7 @@ namespace PersonLibrary
         public void ShowList(string heading)
         {
             Console.WriteLine(heading);
-            foreach (Person man in _list)
+            foreach (PersonBase man in _list)
             {
                 Console.WriteLine(man.Info);
             }
@@ -34,7 +34,7 @@ namespace PersonLibrary
         /// Метод для добавления записи о человеке в список людей
         /// </summary>
         /// <param name="person">Объект класса Person</param>
-        public void Add(Person person)
+        public void Add(PersonBase person)
         {
             Array.Resize(ref _list, _list.Length + 1);
             _list[_list.Length - 1] = person;
@@ -84,7 +84,7 @@ namespace PersonLibrary
         /// Метод для поиска записи о человеке в списке людей по её индексу
         /// </summary>
         /// <returns>Значение формата Person</returns>
-        public Person Find(int index)
+        public PersonBase Find(int index)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace PersonLibrary
         /// <returns>Индекс записи в списке людей, либо -1, если запись не найдена</returns>
         public int FindIndex(string name, string surname, int age)
         {
-            foreach (Person human in _list)
+            foreach (PersonBase human in _list)
             {
                 if (human.Name == name && human.Surname == surname && human.Age == age)
                 {
