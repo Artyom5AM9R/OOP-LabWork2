@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PersonLibrary
 {
     /// <summary>
-    /// Класс, описывающий абстракцию списка, содержащего объекты класса Person
+    /// Класс, описывающий абстракцию списка, содержащего объекты класса PersonBase
     /// </summary>
     public class PersonList
     {
@@ -31,10 +31,19 @@ namespace PersonLibrary
             Console.WriteLine();
         }
 
-        public IEnumerator GetEnumerator()
+//TODO: Разобраться, почему это работает +++
+// Работает с циклом foreach, потому что в методе GetEnumerator происходит возврат объекта IEnumerator для массива _list.
+// В таком случае интерфейс IEnumerable поочередно перебирает элементы массива _list, когда используется foreach.
+// Реализация в таком виде не дает возможности для использования массива _list в цикле for, т.к. не происходит индексация
+// ячеек массива. Для данной цели появляется потребность в наличии у класса PersonList индексатора.
+        /// <summary>
+        /// Метод, позволяющий применять оператор foreach к объекту класса PersonList
+        /// </summary>
+        /// <returns>Записи типа Person из списка PersonList</returns>
+        /*public IEnumerator GetEnumerator()
         {
             return _list.GetEnumerator();
-        }
+        }*/
 
         /// <summary>
         /// Метод для добавления записи о человеке в список людей
@@ -89,7 +98,7 @@ namespace PersonLibrary
         /// <summary>
         /// Метод для поиска записи о человеке в списке людей по её индексу
         /// </summary>
-        /// <returns>Значение формата Person</returns>
+        /// <returns>Значение формата PersonBase</returns>
         public PersonBase Find(int index)
         {
             try

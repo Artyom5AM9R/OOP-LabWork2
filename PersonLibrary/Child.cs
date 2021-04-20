@@ -60,8 +60,8 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Параметризованный конструктор класса для молодого человека при наличии хотя
-        /// бы одного из родителей
+        /// Параметризованный конструктор класса Child при наличии хотя бы 
+        /// одного из родителей
         /// </summary>
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
@@ -71,7 +71,7 @@ namespace PersonLibrary
         /// <param name="father">Отец</param>
         /// <param name="place">Место учебы</param>
         public Child(string name, string surname, int age, GenderType gender,
-            Adult mother, Adult father, string place)
+            Adult mother, Adult father, string place) : base(name, surname, age, gender)
         {
             Name = name;
             Surname = surname;
@@ -83,17 +83,16 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Параметризованный конструктор класса для молодого человека при отсутствии родителей
+        /// Параметризованный конструктор класса Child при отсутствии родителей у ребенка
         /// </summary>
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
         /// <param name="age">Возраст</param>
         /// <param name="gender">Пол</param>
-        /// <param name="mother">Мать</param>
-        /// <param name="father">Отец</param>
-        /// <param name="place">Место учебы</param>
+        /// <param name="presenseOfParents">Признак отсутствия родителей</param>
+        /// <param name="place">Место обучения</param>
         public Child(string name, string surname, int age, GenderType gender,
-            string presenseOfParents, string place)
+            string presenseOfParents, string place) : base(name, surname, age, gender)
         {
             Name = name;
             Surname = surname;
@@ -107,63 +106,74 @@ namespace PersonLibrary
         /// Метод для получения информации о человеке
         /// </summary>
         /// <returns>Значение типа string</returns>
-        public new string Info()
+        public override string Info
         {
-            string mother;
-            string father;
-
-            if (!string.IsNullOrEmpty(PresenseOfParents))
+//TODO: RSDN +++
+            get
             {
+                if (!string.IsNullOrEmpty(PresenseOfParents))
+                {
+                    return $"Имя и фамилия - {Name} {Surname}; " +
+                           $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" +
+                           $"{PresenseOfParents}\n" +
+                           $"Место обучения - {PlaceOfStudy}\n";
+                }
+
+                string mother;
+
+                if (string.IsNullOrEmpty(Mother.Name))
+                {
+                    mother = "нет";
+                }
+                else
+                {
+                    mother = $"{Mother.Name} {Mother.Surname}";
+                }
+
+                string father;
+
+                if (string.IsNullOrEmpty(Father.Name))
+                {
+                    father = "нет";
+                }
+                else
+                {
+                    father = $"{Father.Name} {Father.Surname}";
+                }
+
                 return $"Имя и фамилия - {Name} {Surname}; " +
-                   $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
-                   $"{PresenseOfParents}\n" +
-                   $"Место обучения - {PlaceOfStudy}\n";
+                       $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" +
+                       $"Мать - {mother}\n" +
+                       $"Отец - {father}\n" +
+                       $"Место обучения - {PlaceOfStudy}\n";
             }
-
-            if (string.IsNullOrEmpty(Mother.Name))
-            {
-                mother = "нет";
-            }
-            else
-            {
-                mother = $"{Mother.Name} {Mother.Surname}";
-            }
-
-            if (string.IsNullOrEmpty(Father.Name))
-            {
-                father = "нет";
-            }
-            else
-            {
-                father = $"{Father.Name} {Father.Surname}";
-            }
-
-            return $"Имя и фамилия - {Name} {Surname}; " +
-                   $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
-                   $"Мать - {mother}\n" +
-                   $"Отец - {father}\n" +
-                   $"Место обучения - {PlaceOfStudy}\n";
         }
 
+        /// <summary>
+        /// Метод для проверки наличия родителей у ребенка
+        /// </summary>
+        /// <param name="kind">Ребенок, информацию о наличии родителей которого
+        /// нужно проверить</param>
+        /// <returns>Значение типа string</returns>
         public static string CheckForParents(Child kind)
         {
             if (!string.IsNullOrEmpty(kind.PresenseOfParents))
             {
-                return "у ребенка нет обоих родителей.\n";
+                return "нет обоих родителей.\n";
             }
             else
             {
                 if (string.IsNullOrEmpty(kind.Mother.Name))
                 {
-                    return "у ребенка нет матери.\n";
+                    return "нет матери.\n";
                 }
                 else if (string.IsNullOrEmpty(kind.Father.Name))
                 {
-                    return "у ребенка нет отца.\n";
+                    return "нет отца.\n";
                 }
                 else
                 {
-                    return "ребенок растет в полной семье.\n";
+                    return "растет в полной семье.\n";
                 }
             }
         }

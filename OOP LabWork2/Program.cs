@@ -32,8 +32,8 @@ namespace OOP_LabWork2
         {
             while (true)
             {
-                var ListOne = new PersonList();
-                int start = int.Parse(DateTime.Now.ToString("ss"));
+//TODO: RSDN +++
+                var listOne = new PersonList();
                 Random randomize = new Random();
 
                 ColorTextInConsole("Создание списка с записями о людях:", ConsoleColor.Blue);
@@ -42,69 +42,49 @@ namespace OOP_LabWork2
                 for (int i = 0; i < 7; i++)
                 {
                     int random = randomize.Next(1, 4);
-
+                    PersonBase tmpPerson = new Adult();
+                    
                     switch (random)
                     {
                         case 1:
-                            ListOne.Add(RandomPerson.GetRandomAdultPersonWithoutSpouse());
+                            tmpPerson = RandomPerson.GetRandomAdultPersonWithoutSpouse();
                             break;
                         case 2:
-                            ListOne.Add(RandomPerson.GetRandomAdultPersonWithSpouse());
+                            tmpPerson = RandomPerson.GetRandomAdultPersonWithSpouse();
                             break;
                         case 3:
-                            ListOne.Add(RandomPerson.GetRandomChildPerson());
+                            tmpPerson = RandomPerson.GetRandomChildPerson();
                             break;
                     }
-                }
 
-                int finish = int.Parse(DateTime.Now.ToString("ss"));
-
-                int counter = 0;
-
-                foreach (var man in ListOne)
-                {
-                    counter++;
-                    switch (man)
-                    {
-                        case Adult:
-                            ColorTextInConsole($"{counter}-й человек:", ConsoleColor.Green);
-                            Console.WriteLine(((Adult)man).Info());
-                            break;
-                        case Child:
-                            ColorTextInConsole($"{counter}-й человек:", ConsoleColor.Green);
-                            Console.WriteLine(((Child)man).Info());
-                            break;
-                    }
+                    ColorTextInConsole($"{i + 1}-й человек:", ConsoleColor.Green);
+                    Console.WriteLine(tmpPerson.Info);
+                    listOne.Add(tmpPerson);
                 }
 
                 Console.ReadKey();
-                Console.WriteLine($"Количество записей - {ListOne.Count()}\n");
-                Console.WriteLine($"Время, затраченное на создание списка - {finish - start} сек\n");
+                Console.WriteLine($"Количество записей в списке - {listOne.Count()}\n");
                 Console.ReadKey();
 
                 try
                 {
-                    counter = 0;
-
-                    foreach (var man in ListOne)
+                    int indexForFind = 4;
+                    var findResult = listOne.Find(indexForFind);
+//TODO: pattern-matching +++
+                    switch (findResult)
                     {
-                        counter++;
-
-                        if (counter == 4 && man is Adult)
-                        {
-                            ColorTextInConsole($"\nТип записи о {counter}-ом человеке в списке - " +
-                                $"{man.GetType()}", ConsoleColor.Blue);
-                            ColorTextInConsole($"\nИнформация о брачном партнере рассматриваемого человека:\n",
-                                ConsoleColor.Blue);
-                            Console.WriteLine(Adult.GetInfoAboutSpouse((Adult)man).Info());
-                        }
-                        else if (counter == 4 && man is Child)
-                        {
-                            ColorTextInConsole($"\nТип записи о {counter}-ом человеке в списке - " +
-                                $"{man.GetType()}", ConsoleColor.Blue);
-                            ColorTextInConsole($"\nИнформация о наличии родителей у ребенка: " +
-                                $"{Child.CheckForParents((Child)man)}\n", ConsoleColor.Blue);
-                        }
+                        case Adult adult:
+                            ColorTextInConsole($"\nТип записи о {indexForFind}-ом человеке в списке - " +
+                                $"{adult.GetType()}", ConsoleColor.Blue);
+                            Console.WriteLine($"\nИнформация о брачном партнере рассматриваемого человека:\n");
+                            Console.WriteLine(Adult.GetInfoAboutSpouse(adult).Info);
+                            break;
+                        case Child child:
+                            ColorTextInConsole($"\nТип записи о {indexForFind}-ом человеке в списке - " +
+                                $"{child.GetType()}", ConsoleColor.Blue);
+                            Console.WriteLine($"\nИнформация о наличии родителей у ребенка: " +
+                                $"{Child.CheckForParents(child)}\n");
+                            break;
                     }
                 }
                 catch (Exception exception)

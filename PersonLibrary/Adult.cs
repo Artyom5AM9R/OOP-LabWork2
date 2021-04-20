@@ -64,12 +64,12 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Пустой конструктор класса
+        /// Пустой конструктор класса Adult
         /// </summary>
         public Adult() { }
 
         /// <summary>
-        /// Параметризированный конструктор класса для человека без мужа/жены
+        /// Параметризированный конструктор класса Adult для человека без мужа/жены
         /// </summary>
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
@@ -80,8 +80,8 @@ namespace PersonLibrary
         /// <param name="status">Семеной положение</param>
         /// <param name="spouse">Муж/жена</param>
         /// <param name="job">Место работы</param>
-        public Adult(string name, string surname, int age, GenderType gender, 
-            int series, int number, FamilyStatusType status, Adult spouse, string job)
+        public Adult(string name, string surname, int age, GenderType gender, int series, int number,
+            FamilyStatusType status, Adult spouse, string job) : base(name, surname, age, gender)
         {
             Name = name;
             Surname = surname;
@@ -95,7 +95,7 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Параметризированный конструктор класса для человека с мужем/женой
+        /// Параметризированный конструктор класса Adult для человека с мужем/женой
         /// </summary>
         /// <param name="name">Имя</param>
         /// <param name="surname">Фамилия</param>
@@ -105,8 +105,8 @@ namespace PersonLibrary
         /// <param name="number">Номер паспорта</param>
         /// <param name="status">Семейное положение</param>
         /// <param name="job">Место работы</param>
-        public Adult(string name, string surname, int age, GenderType gender,
-            int series, int number, FamilyStatusType status, string job)
+        public Adult(string name, string surname, int age, GenderType gender, int series,
+            int number, FamilyStatusType status, string job) : base(name, surname, age, gender)
         {
             Name = name;
             Surname = surname;
@@ -121,41 +121,25 @@ namespace PersonLibrary
         /// <summary>
         /// Метод для формирования строки с информацией о человеке
         /// </summary>
-        public new string Info()
+        public override string Info
         {
-            string work;
+            get
+            {
+                string work;
 
-            if (Job.Contains("Безработн") || Job.Contains("Пенсионер"))
-            {
-                work = Job;
-            }
-            else
-            {
-                work = $"Место работы - {Job}";
-            }
+                if (Job.Contains("Безработн") || Job.Contains("Пенсионер"))
+                {
+                    work = Job;
+                }
+                else
+                {
+                    work = $"Место работы - {Job}";
+                }
 
-            if (FamilyStatus == FamilyStatusType.Married)
-            {
                 return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
+                       $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" +
                        $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"{PrintFamilyStatusIntoRussian()}" +
-                       $"{work}\n";
-            }
-            else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
-            {
-                return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
-                       $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"{PrintFamilyStatusIntoRussian()}" +
-                       $"{work}\n";
-            }
-            else
-            {
-                return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {PersonBase.TranslateGenderIntoRussian(Gender)}\n" +
-                       $"Данные паспорта: серия - {PassportSeries}; номер - {PassportNumber}\n" +
-                       $"{PrintFamilyStatusIntoRussian()}" +
+                       $"{FamilyStatusIntoRussian()}" +
                        $"{work}\n";
             }
         }
@@ -197,28 +181,23 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Метод для вывода на экран семейного статуса человека на русском языке
+        /// Метод создания записи о семейном статусе человека на русском языке
         /// </summary>
-        /// <returns></returns>
-        private string PrintFamilyStatusIntoRussian()
+        /// <returns>Значение типа string</returns>
+        private string FamilyStatusIntoRussian()
         {
-            Dictionary<int, string> status = new Dictionary<int, string>(3);
-            status.Add(1, "в браке c");
-            status.Add(2, "холост");
-            status.Add(3, "не замужем");
-
             if (FamilyStatus == FamilyStatusType.Married)
             {
-                return $"Семейное положение - {status[1]} {Spouse.Name} " +
+                return $"Семейное положение - в браке c {Spouse.Name} " +
                        $"{Spouse.Surname}\n";
             }
             else if (FamilyStatus == FamilyStatusType.Unmarried && Gender == GenderType.Male)
             {
-                return $"Семейное положение - {status[2]}\n";
+                return $"Семейное положение - холост\n";
             }
             else
             {
-                return $"Семейное положение - {status[3]}\n";
+                return $"Семейное положение - не замужем\n";
             }
         }
 
@@ -226,7 +205,7 @@ namespace PersonLibrary
         /// Метод для получения информации о муже/жене человека
         /// </summary>
         /// <param name="man">Человек, информацию о муже/жене которого нужно искать</param>
-        /// <returns>Значение типа Person</returns>
+        /// <returns>Значение типа Adult</returns>
         public static Adult GetInfoAboutSpouse(Adult man)
         {
             if (man.FamilyStatus == FamilyStatusType.Married)

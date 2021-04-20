@@ -49,7 +49,7 @@ namespace PersonLibrary
         private static List<string> _femaleSurnames = new List<string>()
         {
             "Гагарина", "Агапова", "Воронова", "Дубровина", "Борисова",
-                "Высоцкая", "Глебова", "Журавлёва", "Громова", "Казакова"
+                "Егорова", "Глебова", "Журавлёва", "Громова", "Казакова"
         };
 
         /// <summary>
@@ -103,10 +103,13 @@ namespace PersonLibrary
                     "Интернет-провайдер 'Дом.ru'", "Автошкола 'УдачаПлюс'", "СТО 'РесурсАвто'",
                     "ООО 'Ситилинк'", "ТПУ", "ТУСУР", null
             };
+
+            const byte maleRetirementAge = 65;
+            const byte femaleRetirementAge = 60;
             string job;
 
-            if ((gender == GenderType.Male && age >= 65) ||
-                (gender == GenderType.Female && age >= 60))
+            if ((gender == GenderType.Male && age >= maleRetirementAge) ||
+                (gender == GenderType.Female && age >= femaleRetirementAge))
             {
                 job = "Пенсионер";
             }
@@ -134,10 +137,11 @@ namespace PersonLibrary
         /// <returns>Значение типа Adult</returns>
         public static Adult GetRandomAdultPersonWithSpouse()
         {
-            Adult FirstMan = GetRandomAdultPersonWithoutSpouse();
-            Adult SecondMan = Adult.FindSpouse(FirstMan);
+//TODO: RSDN +++
+            Adult firstMan = GetRandomAdultPersonWithoutSpouse();
+            Adult secondMan = Adult.FindSpouse(firstMan);
 
-            return FirstMan;
+            return firstMan;
         }
 
         /// <summary>
@@ -250,7 +254,10 @@ namespace PersonLibrary
 
             string placeOfStudy;
 
-            if (age < 6)
+//TODO: const 6 +++
+            const byte schoolStartAge = 6;
+
+            if (age < schoolStartAge)
             {
                 placeOfStudy = kindergartensList[Randomize.Next(0, kindergartensList.Count)];
             }

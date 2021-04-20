@@ -100,14 +100,14 @@ namespace PersonLibrary
         public GenderType Gender { get; set; }
 
         /// <summary>
-        /// Пуской конструктор для класса Person
+        /// Пуской конструктор для класса PersonBase
         /// </summary>
         public PersonBase() { }
 
         /// <summary>
-        /// Конструктор с параметрами для класса Person
+        /// Конструктор с параметрами для класса PersonBase
         /// </summary>
-        /// <returns>Значение формата Person</returns>
+        /// <returns>Значение формата PersonBase</returns>
         public PersonBase(string name, string surname, int age, GenderType gender)
         {
             Name = name;
@@ -119,12 +119,12 @@ namespace PersonLibrary
             Gender = gender;
         }
 
+//TODO: to abstract +++
         /// <summary>
         /// Свойство для получении информации о человеке
         /// </summary>
         /// <returns>Значение формата string</returns>
-        public string Info => $"Имя и фамилия - {Name} {Surname}; " +
-                              $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}";
+        public abstract string Info { get; }
 
         /// <summary>
         /// Метод для проверки наличия одного языка в значениях имени и фамилии
@@ -148,8 +148,6 @@ namespace PersonLibrary
         /// <returns>Значение типа string</returns>
         public string NameOrSurnameValidation(string nameForCheck)
         {
-            string name = null;
-
             nameForCheck = nameForCheck.ToLower();
             var patternList = new List<string>()
             {
@@ -158,6 +156,8 @@ namespace PersonLibrary
                 @"^[а-яё]{2,}-[а-яё]{2,}$",
                 @"^[a-z]{2,}-[a-z]{2,}$",
             };
+
+            string name = null;
 
             foreach (string pattern in patternList)
             {
@@ -169,13 +169,16 @@ namespace PersonLibrary
                 }
             }
 
-            if (name != null && name.Contains("-") && name.Length < 25)
+            const byte maxLengthNameWithDash = 25;
+            const byte maxLengthNameWithoutDash = 13;
+//TODO: Вынести в константы++
+            if (name != null && name.Contains("-") && name.Length <= maxLengthNameWithDash)
             {
                 name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.IndexOf("-")) +
                     name.Substring(name.IndexOf("-") + 1, 1).ToUpper() +
                     name.Substring(name.IndexOf("-") + 2);
             }
-            else if (name != null && !name.Contains("-") && name.Length < 13)
+            else if (name != null && !name.Contains("-") && name.Length < maxLengthNameWithoutDash)
             {
                 name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.Length - 1);
             }
