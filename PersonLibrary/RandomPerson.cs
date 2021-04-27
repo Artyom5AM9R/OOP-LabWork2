@@ -137,28 +137,27 @@ namespace PersonLibrary
         /// <returns>Значение типа Adult</returns>
         public static Adult GetRandomAdultPersonWithSpouse()
         {
-//TODO: RSDN +++
             Adult firstMan = GetRandomAdultPersonWithoutSpouse();
-            Adult secondMan = Adult.FindSpouse(firstMan);
+            firstMan = firstMan.FindSpouse(firstMan);
 
             return firstMan;
         }
 
         /// <summary>
-        /// Метод для генерации записи о взрослом человеке со случайными характеристиками
+        /// Метод для поиска человека без мужа/жены по указанному полу
         /// </summary>
+        /// <param name="gender">Пол человека, которого нужно найти</param>
         /// <returns>Значение типа Adult</returns>
-        public static Adult GetRandomAdultPerson()
+        private static Adult FindManByGender(GenderType gender)
         {
-            int random = Randomize.Next(0, 3);
+            while (true)
+            {
+                var man = GetRandomAdultPersonWithoutSpouse();
 
-            if (random == 0)
-            {
-                return GetRandomAdultPersonWithSpouse();
-            }
-            else
-            {
-                return GetRandomAdultPersonWithSpouse();
+                if (man.Gender == gender)
+                {
+                    return man;
+                }
             }
         }
 
@@ -191,15 +190,7 @@ namespace PersonLibrary
 
             if (Randomize.Next(0, 2) == 1)
             {
-                while (true)
-                {
-                    father = RandomPerson.GetRandomAdultPersonWithoutSpouse();
-
-                    if (father.Gender == GenderType.Male)
-                    {
-                        break;
-                    }
-                }
+                father = FindManByGender(GenderType.Male);
 
                 if (gender == GenderType.Female)
                 {
@@ -217,15 +208,7 @@ namespace PersonLibrary
             {
                 if (string.IsNullOrEmpty(father.Name))
                 {
-                    while (true)
-                    {
-                        mother = RandomPerson.GetRandomAdultPersonWithoutSpouse();
-
-                        if (mother.Gender == GenderType.Female)
-                        {
-                            break;
-                        }
-                    }
+                    mother = FindManByGender(GenderType.Female);
 
                     if (gender == GenderType.Female)
                     {
@@ -238,7 +221,7 @@ namespace PersonLibrary
                 }
                 else
                 {
-                    mother = Adult.FindSpouse(father);
+                    mother = mother.FindSpouse(father);
                 }
             }
 
@@ -254,7 +237,6 @@ namespace PersonLibrary
 
             string placeOfStudy;
 
-//TODO: const 6 +++
             const byte schoolStartAge = 6;
 
             if (age < schoolStartAge)

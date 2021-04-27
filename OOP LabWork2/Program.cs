@@ -32,7 +32,6 @@ namespace OOP_LabWork2
         {
             while (true)
             {
-//TODO: RSDN +++
                 var listOne = new PersonList();
                 Random randomize = new Random();
 
@@ -70,20 +69,30 @@ namespace OOP_LabWork2
                 {
                     int indexForFind = 4;
                     var findResult = listOne.Find(indexForFind);
-//TODO: pattern-matching +++
                     switch (findResult)
                     {
                         case Adult adult:
                             ColorTextInConsole($"\nТип записи о {indexForFind}-ом человеке в списке - " +
                                 $"{adult.GetType()}", ConsoleColor.Blue);
                             Console.WriteLine($"\nИнформация о брачном партнере рассматриваемого человека:\n");
-                            Console.WriteLine(Adult.GetInfoAboutSpouse(adult).Info);
+                            
+                            if (adult.FamilyStatus == FamilyStatusType.Married)
+                            {
+                                Console.WriteLine(adult.Spouse.Info);
+                                Console.WriteLine($"Разница в возрасте между супругами - " +
+                                    $"{adult.AgeDifference()}");
+                            }
+                            else
+                            {
+                                throw new Exception("Указанный человек не состоит в браке.\n");
+                            }
+                            
                             break;
                         case Child child:
                             ColorTextInConsole($"\nТип записи о {indexForFind}-ом человеке в списке - " +
                                 $"{child.GetType()}", ConsoleColor.Blue);
                             Console.WriteLine($"\nИнформация о наличии родителей у ребенка: " +
-                                $"{Child.CheckForParents(child)}\n");
+                                $"{child.CheckForParents()}\n");
                             break;
                     }
                 }

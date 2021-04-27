@@ -119,7 +119,6 @@ namespace PersonLibrary
             Gender = gender;
         }
 
-//TODO: to abstract +++
         /// <summary>
         /// Свойство для получении информации о человеке
         /// </summary>
@@ -171,7 +170,7 @@ namespace PersonLibrary
 
             const byte maxLengthNameWithDash = 25;
             const byte maxLengthNameWithoutDash = 13;
-//TODO: Вынести в константы++
+            
             if (name != null && name.Contains("-") && name.Length <= maxLengthNameWithDash)
             {
                 name = name.Substring(0, 1).ToUpper() + name.Substring(1, name.IndexOf("-")) +

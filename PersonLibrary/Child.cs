@@ -103,71 +103,66 @@ namespace PersonLibrary
         }
 
         /// <summary>
-        /// Метод для получения информации о человеке
+        /// Свойство для получения информации о человеке
         /// </summary>
         /// <returns>Значение типа string</returns>
         public override string Info
         {
-//TODO: RSDN +++
             get
             {
-                if (!string.IsNullOrEmpty(PresenseOfParents))
-                {
-                    return $"Имя и фамилия - {Name} {Surname}; " +
-                           $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" +
-                           $"{PresenseOfParents}\n" +
-                           $"Место обучения - {PlaceOfStudy}\n";
-                }
+                string mother = InfoAboutParents(Mother);
+                string father = InfoAboutParents(Father);
 
-                string mother;
-
-                if (string.IsNullOrEmpty(Mother.Name))
-                {
-                    mother = "нет";
-                }
-                else
-                {
-                    mother = $"{Mother.Name} {Mother.Surname}";
-                }
-
-                string father;
-
-                if (string.IsNullOrEmpty(Father.Name))
-                {
-                    father = "нет";
-                }
-                else
-                {
-                    father = $"{Father.Name} {Father.Surname}";
-                }
-
-                return $"Имя и фамилия - {Name} {Surname}; " +
-                       $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" +
-                       $"Мать - {mother}\n" +
-                       $"Отец - {father}\n" +
-                       $"Место обучения - {PlaceOfStudy}\n";
+                return $"Имя и фамилия - {Name} {Surname}; "
+                       + $"возраст - {Age}; пол - {TranslateGenderIntoRussian(Gender)}\n" 
+                       + (string.IsNullOrEmpty(PresenseOfParents)
+                            ? $"Мать - {mother}\n" + $"Отец - {father}\n"
+                            : $"{PresenseOfParents}\n")
+                       + $"Место обучения - {PlaceOfStudy}\n";
             }
         }
 
+//TODO: Убрать статику +++
+        /// <summary>
+        /// Метод для получения имени и фамилии родителей
+        /// </summary>
+        /// <param name="parent">Мать или отец ребенка</param>
+        /// <returns>Значение типа string</returns>
+        private string InfoAboutParents(Adult parent)
+        {
+            if (parent is null)
+            {
+                return default;
+            }
+
+            if (string.IsNullOrEmpty(parent.Name))
+            {
+                return "нет";
+            }
+            else
+            {
+                return $"{parent.Name} {parent.Surname}";
+            }
+        }
+
+//TODO: Убрать статику +++
         /// <summary>
         /// Метод для проверки наличия родителей у ребенка
         /// </summary>
-        /// <param name="kind">Ребенок, информацию о наличии родителей которого
-        /// нужно проверить</param>
         /// <returns>Значение типа string</returns>
-        public static string CheckForParents(Child kind)
+        public string CheckForParents()
         {
-            if (!string.IsNullOrEmpty(kind.PresenseOfParents))
+            if (!string.IsNullOrEmpty(PresenseOfParents))
             {
                 return "нет обоих родителей.\n";
             }
             else
             {
-                if (string.IsNullOrEmpty(kind.Mother.Name))
+                if (string.IsNullOrEmpty(Mother.Name))
                 {
                     return "нет матери.\n";
                 }
-                else if (string.IsNullOrEmpty(kind.Father.Name))
+                else if (string.IsNullOrEmpty(Father.Name))
                 {
                     return "нет отца.\n";
                 }

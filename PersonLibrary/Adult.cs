@@ -119,7 +119,7 @@ namespace PersonLibrary
         }
         
         /// <summary>
-        /// Метод для формирования строки с информацией о человеке
+        /// Свойство для формирования строки с информацией о человеке
         /// </summary>
         public override string Info
         {
@@ -147,9 +147,9 @@ namespace PersonLibrary
         /// <summary>
         /// Метод для поиска мужа/жены для человека
         /// </summary>
-        /// <param name="man">Человек, для которого нудо искать мужа/жену</param>
+        /// <param name="man">Человек, для которого нужно искать мужа/жену</param>
         /// <returns>Значение типа Adult</returns>
-        public static Adult FindSpouse(Adult man)
+        public Adult FindSpouse(Adult man)
         {
             Adult couple;
 
@@ -201,21 +201,25 @@ namespace PersonLibrary
             }
         }
 
+//TODO: Убрать статику +++
         /// <summary>
-        /// Метод для получения информации о муже/жене человека
+        /// Метод для определения разницы в возрасте между супругами
         /// </summary>
-        /// <param name="man">Человек, информацию о муже/жене которого нужно искать</param>
         /// <returns>Значение типа Adult</returns>
-        public static Adult GetInfoAboutSpouse(Adult man)
+        public int AgeDifference()
         {
-            if (man.FamilyStatus == FamilyStatusType.Married)
+            int difference;
+
+            if (FamilyStatus == FamilyStatusType.Married)
             {
-                return man.Spouse;
+                difference = Math.Abs(Age - Spouse.Age);
             }
             else
             {
-                throw new Exception("Указанный человек не состоит в браке.\n");
+                difference = -1;
             }
+
+            return difference;
         }
     }
 }
